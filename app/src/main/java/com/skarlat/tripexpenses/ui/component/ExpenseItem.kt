@@ -1,8 +1,10 @@
 package com.skarlat.tripexpenses.ui.component
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -14,10 +16,14 @@ import androidx.compose.ui.unit.dp
 import com.skarlat.tripexpenses.ui.model.Expense
 
 @Composable
-fun ExpenseItem(item: Expense) {
+fun ExpenseItem(item: Expense, onClick: () -> Unit) {
     Box(Modifier.background(Color.White)) {
-        Box(Modifier.padding(8.dp)) {
-            Column {
+        Box(
+            Modifier
+                .padding(8.dp)
+                .clickable { onClick.invoke() }
+                .fillMaxWidth()) {
+            Column(Modifier.fillMaxWidth()) {
                 val horizontalEnd = Modifier.align(
                     Alignment.End
                 )
@@ -47,5 +53,5 @@ fun ExpenseItemPreview() {
             isPayed = false,
             date = "27 февраля 2018г."
         )
-    )
+    ) { }
 }
