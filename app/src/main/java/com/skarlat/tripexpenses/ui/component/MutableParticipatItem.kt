@@ -48,7 +48,7 @@ fun ParticipantItem(
 @Preview
 @Composable
 fun PreviewParticipantItem() {
-    val participant = Participant(id = "", "Василий")
+    val participant = Participant(id = "", name = "Василий")
     Box(modifier = Modifier.fillMaxSize()) {
         ParticipantItem(
             item = participant,

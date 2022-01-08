@@ -4,4 +4,10 @@
 	<string name="remove_description">Удалить</string>
 	<string name="add_participant">Добавить участника</string>
 	<string name="create_trip">Создать поездку</string>
+	<string name="date">Дата:</string>
+	<string name="total_sum">Итоговая сумма:</string>
+	<string name="distribution">Распределение</string>
+	<string name="pay_owner">Оплатил:</string>
+	<string name="add_distribution">Добавить</string>
+	<string name="delete">Удалить</string>
 </resources>
