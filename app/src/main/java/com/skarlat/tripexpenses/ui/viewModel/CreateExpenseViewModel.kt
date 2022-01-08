@@ -98,4 +98,7 @@ class CreateExpenseViewModel : ViewModel() {
         super.onCleared()
         distributionCounter = 0
     }
+
+    fun onCreateExpenseClicked() {
+    }
 }

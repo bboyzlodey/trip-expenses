@@ -90,6 +90,11 @@ fun CreateExpenseScreen(viewModel: CreateExpenseViewModel) {
                 selectedItems = listOf(payOwnerId),
                 onItemSelected = { viewModel.onPayOwnerSelected(it) })
         }
+        item {
+            TextButton(onClick = { viewModel.onCreateExpenseClicked() }) {
+                Text(text = stringResource(id = R.string.end))
+            }
+        }
     }
 }
 
