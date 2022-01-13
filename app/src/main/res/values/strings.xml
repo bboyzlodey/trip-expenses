@@ -10,4 +10,5 @@
 	<string name="pay_owner">Оплатил:</string>
 	<string name="add_distribution">Добавить</string>
 	<string name="delete">Удалить</string>
+	<string name="end">Закончить</string>
 </resources>
