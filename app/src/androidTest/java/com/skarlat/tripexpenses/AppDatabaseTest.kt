@@ -6,7 +6,9 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.skarlat.tripexpenses.data.local.database.AppDatabase
 import com.skarlat.tripexpenses.data.local.entity.Expense
+import com.skarlat.tripexpenses.data.local.entity.ExpenseDebtor
 import com.skarlat.tripexpenses.data.local.entity.Participant
+import com.skarlat.tripexpenses.data.local.model.DebtorInfo
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.asExecutor
 import kotlinx.coroutines.test.TestCoroutineDispatcher
@@ -36,12 +38,12 @@ class AppDatabaseTest {
 
     @After
     fun closeDb() {
+        db.clearAllTables()
         db.close()
     }
 
     @Test
     fun testExpenseInfoRelation() = testScope.runBlockingTest {
-        db.clearAllTables()
         val mockedParticipant = Participant("mocked_id", name = "Mr. Mock", "")
         val mockedExpense = Expense(
             "expense_id",
@@ -56,5 +58,25 @@ class AppDatabaseTest {
         db.expenseDAO.insertExpense(mockedExpense)
         val result = db.expenseDAO.getExpenseInfo(mockedExpense.id)
         assert(result.ownerName == mockedParticipant.name)
+    }
+
+    @Test
+    fun debtorInfoRelation() = testScope.runBlockingTest {
+        val mockedParticipant = Participant("mocked_id", name = "Mr. Mock", "")
+        val mockedDebtor = ExpenseDebtor(
+            "id",
+            expenseId = "some_expense",
+            1000,
+            participantId = mockedParticipant.id,
+            isDebtPayed = false
+        )
+        db.participantDAO.insert(mockedParticipant)
+        db.debtorDAO.insert(mockedDebtor)
+
+        val factResult = db.debtorDAO.getExpenseDebtors(mockedDebtor.expenseId)
+        val expectedResult = listOf(
+            DebtorInfo(debtor = mockedDebtor, participant = mockedParticipant)
+        )
+        assert(factResult == expectedResult)
     }
 }
