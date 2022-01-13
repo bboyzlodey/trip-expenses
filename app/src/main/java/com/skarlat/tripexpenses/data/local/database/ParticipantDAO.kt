@@ -10,4 +10,7 @@ interface ParticipantDAO {
     @Insert
     suspend fun insert(entity: Participant)
 
+    @Insert
+    suspend fun insertAll(vararg participants: Participant)
+
 }
