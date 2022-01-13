@@ -13,7 +13,10 @@ interface DebtorDAO {
     @Insert
     suspend fun insert(entity: ExpenseDebtor)
 
+    @Insert
+    suspend fun insertAll(vararg debtors: ExpenseDebtor)
+
     @Transaction
     @Query("SELECT * FROM expensedebtor WHERE expense_id = :expenseId")
-    suspend fun getExpenseDebtors(expenseId: String) : List<DebtorInfo>
+    suspend fun getExpenseDebtors(expenseId: String): List<DebtorInfo>
 }
