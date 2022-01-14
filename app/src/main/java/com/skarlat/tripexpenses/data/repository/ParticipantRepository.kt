@@ -11,4 +11,10 @@ class ParticipantRepository(private val participantDAO: ParticipantDAO) : IParti
             participantDAO.insertAll(*participants.toTypedArray())
         }
     }
+
+    override suspend fun getParticipants(tripId: String): List<Participant> {
+        return withContext(Dispatchers.IO) {
+            getParticipants(tripId)
+        }
+    }
 }
