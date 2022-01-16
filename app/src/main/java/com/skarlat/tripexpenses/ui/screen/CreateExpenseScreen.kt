@@ -101,5 +101,5 @@ fun CreateExpenseScreen(viewModel: CreateExpenseViewModel) {
 @Preview
 @Composable
 fun Preview() {
-    CreateExpenseScreen(viewModel = CreateExpenseViewModel())
+//    CreateExpenseScreen(viewModel = CreateExpenseViewModel())
 }
