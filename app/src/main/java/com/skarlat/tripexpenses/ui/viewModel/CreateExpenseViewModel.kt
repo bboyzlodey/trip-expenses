@@ -1,21 +1,18 @@
 package com.skarlat.tripexpenses.ui.viewModel
 
 import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.skarlat.tripexpenses.business.interactor.ExpenseInteractor
+import com.skarlat.tripexpenses.ui.model.CreateExpenseCommand
 import com.skarlat.tripexpenses.ui.model.Distribution
 import com.skarlat.tripexpenses.ui.model.Participant
 import com.skarlat.tripexpenses.utils.Const
-import com.skarlat.tripexpenses.utils.MockHelper
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
-class CreateExpenseViewModel : ViewModel() {
+class CreateExpenseViewModel(private val expenseInteractor: ExpenseInteractor) : ViewModel() {
 
     val expenseDate: StateFlow<String> get() = expenseDateMutableFlow
     private val expenseDateMutableFlow = MutableStateFlow("")
@@ -28,14 +25,7 @@ class CreateExpenseViewModel : ViewModel() {
         MutableStateFlow<List<String>>(listOf())
 
     val participants: StateFlow<List<Participant>> get() = participantsMutableFlow
-    private val participantsMutableFlow =
-        MutableStateFlow<List<Participant>>(
-            MockHelper.getParticipants()
-        )
-
-    val participantCosts: Flow<List<Pair<Participant, Int>>> get() = participantCostsMutableFlow
-    private val participantCostsMutableFlow =
-        MutableStateFlow<List<Pair<Participant, Int>>>(listOf())
+    private val participantsMutableFlow = MutableStateFlow<List<Participant>>(emptyList())
 
     val payOwnerId: StateFlow<String> get() = payOwnerIdMutable
     private val payOwnerIdMutable = MutableStateFlow(Const.SELF_ID)
@@ -43,7 +33,7 @@ class CreateExpenseViewModel : ViewModel() {
     val distribution: SnapshotStateList<Distribution> get() = distributionsMutable
     private val distributionsMutable = mutableStateListOf(getNextDistribution())
 
-    fun onDateSelected(dayOfMonth: Int, monthOfYear: Int, year: Int) {
+    private fun onDateSelected(dayOfMonth: Int, monthOfYear: Int, year: Int) {
         viewModelScope.launch {
             expenseDateMutableFlow.emit("${dayOfMonth}-${monthOfYear}-${year}")
         }
@@ -61,15 +51,8 @@ class CreateExpenseViewModel : ViewModel() {
         }
     }
 
-    inline fun List<String>.addOrRemove(key: String): List<String> {
-        return this.toMutableList().apply {
-            if (!this.removeIf { it == key })
-                this.add(key)
-        }
-    }
-
     fun onSelectDateClicked() {
-
+        // TODO
     }
 
     fun onPayOwnerSelected(id: String) {
@@ -84,21 +67,47 @@ class CreateExpenseViewModel : ViewModel() {
         distributionsMutable.removeIf { it.id == distribution.id }
     }
 
-    private var distributionCounter = 0
-
     private fun getNextDistribution(): Distribution {
-        return Distribution(
-            id = distributionCounter++,
-            cost = mutableStateOf(0),
-            participantIds = mutableStateListOf()
-        )
+        return Distribution.createEmpty()
     }
 
     override fun onCleared() {
         super.onCleared()
-        distributionCounter = 0
+        Distribution.resetCounter()
     }
 
     fun onCreateExpenseClicked() {
+        viewModelScope.launch {
+            val screenData = packScreenData()
+            flow { emit(expenseInteractor.createExpense(screenData)) }
+                .onStart { }
+                .onCompletion { }
+                .catch { error -> expenseCreatedFailure(error) }
+                .collect { expenseCreatedSuccess() }
+        }
+    }
+
+    private fun packScreenData(): CreateExpenseCommand {
+        return CreateExpenseCommand(
+            date = expenseDate.value,
+            totalAmount = expenseSummaryCost.value,
+            distributions = distribution,
+            payOwnerId = payOwnerId.value
+        )
+    }
+
+    private fun expenseCreatedSuccess() {
+        // TODO
+    }
+
+    private fun expenseCreatedFailure(error: Throwable?) {
+        // TODO
+    }
+
+    private fun List<String>.addOrRemove(key: String): List<String> {
+        return this.toMutableList().apply {
+            if (!this.removeIf { it == key })
+                this.add(key)
+        }
     }
 }
