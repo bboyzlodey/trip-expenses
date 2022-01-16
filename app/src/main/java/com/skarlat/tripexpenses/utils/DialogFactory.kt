@@ -7,11 +7,11 @@ object DialogFactory {
 
     fun showDialog(fragmentManager: FragmentManager, dialogData: DialogData) {
         when (dialogData) {
-            is DialogData.DatePicker -> showDialog(fragmentManager, dialogData)
+            is DialogData.DatePicker -> showDatePickerDialog(fragmentManager, dialogData)
         }
     }
 
-    private fun showDialog(fragmentManager: FragmentManager, dialogData: DialogData.DatePicker) {
+    private fun showDatePickerDialog(fragmentManager: FragmentManager, dialogData: DialogData.DatePicker) {
         MaterialDatePicker.Builder.datePicker()
             .setSelection(MaterialDatePicker.todayInUtcMilliseconds()).build()
             .apply {
