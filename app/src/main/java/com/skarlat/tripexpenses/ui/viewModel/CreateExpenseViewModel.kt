@@ -5,17 +5,27 @@ import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.skarlat.tripexpenses.business.interactor.ExpenseInteractor
+import com.skarlat.tripexpenses.ui.ExpenseDateMemento
 import com.skarlat.tripexpenses.ui.model.CreateExpenseCommand
 import com.skarlat.tripexpenses.ui.model.Distribution
 import com.skarlat.tripexpenses.ui.model.Participant
 import com.skarlat.tripexpenses.utils.Const
+import com.skarlat.tripexpenses.utils.DialogData
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
-class CreateExpenseViewModel(private val expenseInteractor: ExpenseInteractor) : ViewModel() {
+class CreateExpenseViewModel(
+    private val expenseInteractor: ExpenseInteractor,
+    private val mainViewModel: MainViewModel,
+    private val expenseDateMemento: ExpenseDateMemento
+) : ViewModel() {
 
-    val expenseDate: StateFlow<String> get() = expenseDateMutableFlow
-    private val expenseDateMutableFlow = MutableStateFlow("")
+    val expenseDate: StateFlow<String>
+        get() = expenseDateMemento.readableDateFlow.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(),
+            initialValue = ""
+        )
 
     val expenseSummaryCost: StateFlow<Int> get() = expenseSummaryCostMutableFlow
     private val expenseSummaryCostMutableFlow = MutableStateFlow(0)
@@ -33,9 +43,9 @@ class CreateExpenseViewModel(private val expenseInteractor: ExpenseInteractor) :
     val distribution: SnapshotStateList<Distribution> get() = distributionsMutable
     private val distributionsMutable = mutableStateListOf(getNextDistribution())
 
-    private fun onDateSelected(dayOfMonth: Int, monthOfYear: Int, year: Int) {
+    private fun onDateInMillisSelected(dateInMillis: Long) {
         viewModelScope.launch {
-            expenseDateMutableFlow.emit("${dayOfMonth}-${monthOfYear}-${year}")
+            expenseDateMemento.selectTimestamp(dateInMillis)
         }
     }
 
@@ -52,7 +62,14 @@ class CreateExpenseViewModel(private val expenseInteractor: ExpenseInteractor) :
     }
 
     fun onSelectDateClicked() {
-        // TODO
+        viewModelScope.launch {
+            mainViewModel.showDialog(
+                DialogData.DatePicker(
+                    onDateSelected = { onDateInMillisSelected(it) },
+                    negativeButtonClicked = {}
+                )
+            )
+        }
     }
 
     fun onPayOwnerSelected(id: String) {
@@ -87,9 +104,9 @@ class CreateExpenseViewModel(private val expenseInteractor: ExpenseInteractor) :
         }
     }
 
-    private fun packScreenData(): CreateExpenseCommand {
+    private suspend fun packScreenData(): CreateExpenseCommand {
         return CreateExpenseCommand(
-            date = expenseDate.value,
+            date = expenseDateMemento.getSelectedDateISO(),
             totalAmount = expenseSummaryCost.value,
             distributions = distribution,
             payOwnerId = payOwnerId.value
