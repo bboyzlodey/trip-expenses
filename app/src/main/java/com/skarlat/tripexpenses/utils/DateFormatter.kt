@@ -1,8 +1,13 @@
 package com.skarlat.tripexpenses.utils
 
+import java.sql.Time
 import java.time.Instant
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.temporal.TemporalAccessor
+import java.util.*
 
 class DateFormatter {
 
@@ -12,11 +17,11 @@ class DateFormatter {
     }
 
     fun formatFromInstant(millis: Long, format: String): String {
-        return format(format, millis.toInstant())
+        return format(format, LocalDateTime.ofInstant(millis.toInstant(), ZoneId.systemDefault()))
     }
 
     fun formatFromInstant(millis: Long, formatter: DateTimeFormatter) : String {
-        return formatter.format(millis.toInstant())
+        return formatter.format(LocalDateTime.ofInstant(millis.toInstant(), ZoneId.systemDefault()))
     }
 
     private fun Long.toInstant(): Instant = Instant.ofEpochMilli(this)
