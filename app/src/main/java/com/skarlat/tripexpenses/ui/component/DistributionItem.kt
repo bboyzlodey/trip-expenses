@@ -30,7 +30,8 @@ fun DistributionItem(
     onRemoveClicked: () -> Unit,
     participants: List<Participant>,
     isSupportDeleting: Boolean,
-    allChipItemId: String = Const.ALL_ID
+    allChipItemId: String = Const.ALL_ID,
+    onDistributionValueChanged: (String) -> Unit
 ) {
     Row {
         Column(modifier = Modifier.weight(1f)) {
@@ -39,7 +40,10 @@ fun DistributionItem(
             }
             OutlinedTextField(
                 value = cost.value.toString(),
-                onValueChange = { item.cost.value = it.toIntOrNull() ?: 0 },
+                onValueChange = {
+                    onDistributionValueChanged.invoke(it)
+                    item.cost.value = it.toIntOrNull() ?: 0
+                },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
             )
             val selectedItems = remember {
@@ -86,6 +90,7 @@ fun Preview() {
         item = distItem,
         onRemoveClicked = { /*TODO*/ },
         participants = participants,
-        isSupportDeleting = false
+        isSupportDeleting = false,
+        onDistributionValueChanged = {}
     )
 }

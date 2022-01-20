@@ -68,7 +68,8 @@ fun CreateExpenseScreen(viewModel: CreateExpenseViewModel) {
                 item = item,
                 onRemoveClicked = { viewModel.onRemoveDistributionCLicked(item) },
                 participants = participants,
-                isSupportDeleting = distributions.size > 1
+                isSupportDeleting = distributions.size > 1,
+                onDistributionValueChanged = { viewModel.onCostChanged(costId = item.id.toString(), cost = it) }
             )
         }
 

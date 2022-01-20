@@ -4,6 +4,7 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.skarlat.tripexpenses.business.calculator.ICostCalculator
 import com.skarlat.tripexpenses.business.interactor.ExpenseInteractor
 import com.skarlat.tripexpenses.ui.ExpenseDateMemento
 import com.skarlat.tripexpenses.ui.model.CreateExpenseCommand
@@ -17,7 +18,8 @@ import kotlinx.coroutines.launch
 class CreateExpenseViewModel(
     private val expenseInteractor: ExpenseInteractor,
     private val mainViewModel: MainViewModel,
-    private val expenseDateMemento: ExpenseDateMemento
+    private val expenseDateMemento: ExpenseDateMemento,
+    private val costCalculator: ICostCalculator
 ) : ViewModel() {
 
     val expenseDate: StateFlow<String>
@@ -27,8 +29,12 @@ class CreateExpenseViewModel(
             initialValue = ""
         )
 
-    val expenseSummaryCost: StateFlow<Int> get() = expenseSummaryCostMutableFlow
-    private val expenseSummaryCostMutableFlow = MutableStateFlow(0)
+    val expenseSummaryCost: StateFlow<Int>
+        get() = costCalculator.totalCost.stateIn(
+            viewModelScope,
+            started = SharingStarted.Eagerly,
+            0
+        )
 
     val expenseParticipantIds: Flow<List<String>> get() = expenseParticipantIdsMutableFlow
     private val expenseParticipantIdsMutableFlow =
@@ -49,11 +55,13 @@ class CreateExpenseViewModel(
         }
     }
 
-    fun onSummaryCostChanged(cost: String) {
-        val summaryCost = cost.toIntOrNull() ?: 0
-        expenseSummaryCostMutableFlow.tryEmit(summaryCost)
+    fun onCostChanged(cost: String, costId: String) {
+        viewModelScope.launch {
+            costCalculator.onCostChanged(costId, cost)
+        }
     }
 
+    @Deprecated("Unused method")
     fun onParticipantOfExpenseClicked(item: Participant) {
         viewModelScope.launch {
             val participants = expenseParticipantIds.first()
@@ -77,11 +85,15 @@ class CreateExpenseViewModel(
     }
 
     fun onAddDistributionClicked() {
-        distributionsMutable.add(getNextDistribution())
+        val nextDistribution = getNextDistribution()
+        distributionsMutable.add(nextDistribution)
     }
 
     fun onRemoveDistributionCLicked(distribution: Distribution) {
-        distributionsMutable.removeIf { it.id == distribution.id }
+        viewModelScope.launch {
+            distributionsMutable.removeIf { it.id == distribution.id }
+            costCalculator.onCostChanged(distribution.id.toString(), "0")
+        }
     }
 
     private fun getNextDistribution(): Distribution {
