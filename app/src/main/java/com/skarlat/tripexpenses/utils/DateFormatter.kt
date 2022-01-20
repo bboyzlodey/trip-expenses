@@ -5,8 +5,11 @@ import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.temporal.TemporalAccessor
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class DateFormatter {
+@Singleton
+class DateFormatter @Inject constructor() {
 
     companion object Formats {
         const val DD_MMM = "DD MMM"

@@ -2,10 +2,15 @@ package com.skarlat.tripexpenses.ui
 
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.skarlat.tripexpenses.utils.DateFormatter
-import kotlinx.coroutines.flow.*
+import dagger.hilt.android.scopes.ActivityRetainedScoped
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
 import java.time.format.DateTimeFormatter
+import javax.inject.Inject
 
-class ExpenseDateMemento(private val dateFormatter: DateFormatter) {
+@ActivityRetainedScoped
+class ExpenseDateMemento @Inject constructor(private val dateFormatter: DateFormatter) {
 
     private val timeStamp = MutableStateFlow(MaterialDatePicker.thisMonthInUtcMilliseconds())
 

@@ -9,14 +9,17 @@ import com.skarlat.tripexpenses.data.repository.IParticipantRepository
 import com.skarlat.tripexpenses.ui.model.CreateExpenseCommand
 import com.skarlat.tripexpenses.ui.model.Expense
 import com.skarlat.tripexpenses.ui.model.Participant
+import dagger.hilt.android.scopes.ActivityRetainedScoped
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import java.time.Instant
 import java.util.*
+import javax.inject.Inject
 import com.skarlat.tripexpenses.data.local.entity.Expense as ExpenseEntity
 
-class ExpenseInteractor(
+@ActivityRetainedScoped
+class ExpenseInteractor @Inject constructor(
     private val expenseRepository: IExpenseRepository,
     private val debtorRepository: IDebtorRepository,
     private val participantRepository: IParticipantRepository

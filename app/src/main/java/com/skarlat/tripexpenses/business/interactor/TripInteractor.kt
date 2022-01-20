@@ -6,11 +6,14 @@ import com.skarlat.tripexpenses.data.local.entity.Trip
 import com.skarlat.tripexpenses.data.repository.IParticipantRepository
 import com.skarlat.tripexpenses.data.repository.ITripRepository
 import com.skarlat.tripexpenses.ui.model.Participant
+import dagger.hilt.android.scopes.ActivityRetainedScoped
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import java.util.*
+import javax.inject.Inject
 
-class TripInteractor(
+@ActivityRetainedScoped
+class TripInteractor @Inject constructor(
     private val tripRepository: ITripRepository,
     private val participantRepository: IParticipantRepository
 ) {

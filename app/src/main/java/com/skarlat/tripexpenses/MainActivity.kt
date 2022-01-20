@@ -4,16 +4,16 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
-import androidx.compose.material.Text
 import androidx.lifecycle.lifecycleScope
 import com.skarlat.tripexpenses.ui.theme.TripExpensesTheme
 import com.skarlat.tripexpenses.ui.viewModel.MainViewModel
 import com.skarlat.tripexpenses.utils.DialogFactory
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() /*,ComponentActivity()*/ {
 
     private val viewModel by viewModels<MainViewModel>()

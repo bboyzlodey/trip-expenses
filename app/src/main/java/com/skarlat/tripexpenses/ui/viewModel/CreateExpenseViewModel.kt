@@ -4,6 +4,7 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.skarlat.tripexpenses.ActivityUtils
 import com.skarlat.tripexpenses.business.calculator.ICostCalculator
 import com.skarlat.tripexpenses.business.interactor.ExpenseInteractor
 import com.skarlat.tripexpenses.ui.ExpenseDateMemento
@@ -12,12 +13,15 @@ import com.skarlat.tripexpenses.ui.model.Distribution
 import com.skarlat.tripexpenses.ui.model.Participant
 import com.skarlat.tripexpenses.utils.Const
 import com.skarlat.tripexpenses.utils.DialogData
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class CreateExpenseViewModel(
+@HiltViewModel
+class CreateExpenseViewModel @Inject constructor(
     private val expenseInteractor: ExpenseInteractor,
-    private val mainViewModel: MainViewModel,
+    private val activityUtils: ActivityUtils,
     private val expenseDateMemento: ExpenseDateMemento,
     private val costCalculator: ICostCalculator
 ) : ViewModel() {
@@ -71,7 +75,7 @@ class CreateExpenseViewModel(
 
     fun onSelectDateClicked() {
         viewModelScope.launch {
-            mainViewModel.showDialog(
+            activityUtils.showDialog(
                 DialogData.DatePicker(
                     onDateSelected = { onDateInMillisSelected(it) },
                     negativeButtonClicked = {}

@@ -4,8 +4,12 @@ import com.skarlat.tripexpenses.data.local.database.ParticipantDAO
 import com.skarlat.tripexpenses.data.local.entity.Participant
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class ParticipantRepository(private val participantDAO: ParticipantDAO) : IParticipantRepository {
+@Singleton
+class ParticipantRepository @Inject constructor(private val participantDAO: ParticipantDAO) :
+    IParticipantRepository {
     override suspend fun addParticipants(participants: List<Participant>) {
         withContext(Dispatchers.IO) {
             participantDAO.insertAll(*participants.toTypedArray())

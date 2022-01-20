@@ -1,6 +1,8 @@
 package com.skarlat.tripexpenses.business.calculator
 
 import com.skarlat.tripexpenses.ui.model.Distribution
+import dagger.hilt.android.scopes.ActivityRetainedScoped
+import javax.inject.Inject
 
 interface IDebtorCalculator {
 
@@ -10,7 +12,8 @@ interface IDebtorCalculator {
     fun calculateDebits(distributions: Iterable<Distribution>): Map<String, Int>
 }
 
-class DebtCalculator : IDebtorCalculator {
+@ActivityRetainedScoped
+class DebtCalculator @Inject constructor() : IDebtorCalculator {
 
     override fun calculateDebits(distributions: Iterable<Distribution>): Map<String, Int> {
         val debtorMap = mutableMapOf<String, Int>()

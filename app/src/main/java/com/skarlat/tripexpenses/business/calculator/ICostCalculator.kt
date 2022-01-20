@@ -1,7 +1,9 @@
 package com.skarlat.tripexpenses.business.calculator
 
+import dagger.hilt.android.scopes.ViewModelScoped
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import javax.inject.Inject
 
 interface ICostCalculator {
     val totalCost: Flow<Int>
@@ -9,7 +11,8 @@ interface ICostCalculator {
     suspend fun onCostChanged(costId: String, newCost: String)
 }
 
-class TotalCostCalculator : ICostCalculator {
+@ViewModelScoped
+class TotalCostCalculator @Inject constructor() : ICostCalculator {
 
     override val totalCost: Flow<Int>
         get() = totalCostMutableFlow
