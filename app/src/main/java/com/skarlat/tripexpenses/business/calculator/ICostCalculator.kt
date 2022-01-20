@@ -21,6 +21,7 @@ class TotalCostCalculator : ICostCalculator {
         val newCost = cost.toIntOrNull() ?: 0
         val totalCost = this.totalCostMutableFlow.value
         val oldCost = costMap.getOrDefault(costId, 0)
-        totalCostMutableFlow.tryEmit(totalCost - oldCost + newCost)
+        costMap[costId] = newCost
+        totalCostMutableFlow.value = totalCost - oldCost + newCost
     }
 }
