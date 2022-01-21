@@ -11,6 +11,8 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -18,9 +20,10 @@ import com.skarlat.tripexpenses.R
 import com.skarlat.tripexpenses.ui.component.TripItem
 import com.skarlat.tripexpenses.ui.model.Trip
 import com.skarlat.tripexpenses.ui.theme.Shapes
+import com.skarlat.tripexpenses.ui.viewModel.TripListViewModel
 
 @Composable
-fun TripListScreen(trips: List<Trip>, onClick: (Trip) -> Unit, onCreateTripCLicked: () -> Unit) {
+fun TripList(trips: List<Trip>, onClick: (Trip) -> Unit, onCreateTripCLicked: () -> Unit) {
     Scaffold(floatingActionButton = {
         FloatingActionButton(
             onClick = onCreateTripCLicked,
@@ -43,10 +46,20 @@ fun TripListScreen(trips: List<Trip>, onClick: (Trip) -> Unit, onCreateTripCLick
     }
 }
 
+@Composable
+fun TripListScreen(viewModel: TripListViewModel) {
+    val tripList by viewModel.tripListFlow.collectAsState()
+    TripList(
+        trips = tripList,
+        onClick = { viewModel.onTripCLicked(it.id) },
+        onCreateTripCLicked = viewModel::onCreateTripClicked
+    )
+}
+
 @Preview
 @Composable
 fun PreviewTripList() {
-    TripListScreen(
+    TripList(
         trips = listOf(
             Trip("", "Санкт Петербург"),
             Trip("", "Архыз"),

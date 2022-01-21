@@ -14,7 +14,7 @@ import androidx.navigation.compose.rememberNavController
 import com.skarlat.tripexpenses.ui.screen.CreateExpenseScreen
 import com.skarlat.tripexpenses.ui.screen.CreateTripScreen
 import com.skarlat.tripexpenses.ui.screen.PreviewExpenseListScreen
-import com.skarlat.tripexpenses.ui.screen.PreviewTripList
+import com.skarlat.tripexpenses.ui.screen.TripListScreen
 import com.skarlat.tripexpenses.ui.theme.TripExpensesTheme
 import com.skarlat.tripexpenses.ui.viewModel.MainViewModel
 import com.skarlat.tripexpenses.utils.Const
@@ -39,7 +39,7 @@ class MainActivity : AppCompatActivity() /*,ComponentActivity()*/ {
                         startDestination = Const.SCREEN_LIST_TRIP
                     ) {
                         composable(route = Const.SCREEN_LIST_TRIP) { navBackStackEntry ->
-                            PreviewTripList()
+                            TripListScreen(viewModel = hiltViewModel())
                         }
                         composable(route = Const.SCREEN_CREATE_TRIP) { navBackStackEntry ->
                             CreateTripScreen(viewModel = hiltViewModel())
