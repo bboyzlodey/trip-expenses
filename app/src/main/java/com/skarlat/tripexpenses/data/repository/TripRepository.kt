@@ -2,12 +2,12 @@ package com.skarlat.tripexpenses.data.repository
 
 import com.skarlat.tripexpenses.data.local.database.TripDAO
 import com.skarlat.tripexpenses.data.local.entity.Trip
-import dagger.hilt.android.scopes.ActivityRetainedScoped
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
+import javax.inject.Singleton
 
-@ActivityRetainedScoped
+@Singleton
 class TripRepository @Inject constructor(private val tripDAO: TripDAO) : ITripRepository {
     override suspend fun getTrips(): List<Trip> {
         return withContext(Dispatchers.IO) {
