@@ -6,11 +6,14 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
+import androidx.compose.runtime.LaunchedEffect
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.skarlat.tripexpenses.ui.navigation.NavigationEvent
+import com.skarlat.tripexpenses.ui.navigation.Navigator
 import com.skarlat.tripexpenses.ui.screen.CreateExpenseScreen
 import com.skarlat.tripexpenses.ui.screen.CreateTripScreen
 import com.skarlat.tripexpenses.ui.screen.PreviewExpenseListScreen
@@ -21,11 +24,15 @@ import com.skarlat.tripexpenses.utils.Const
 import com.skarlat.tripexpenses.utils.DialogFactory
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() /*,ComponentActivity()*/ {
 
     private val viewModel by viewModels<MainViewModel>()
+
+    @Inject
+    lateinit var navigator: Navigator
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,6 +41,17 @@ class MainActivity : AppCompatActivity() /*,ComponentActivity()*/ {
                 // A surface container using the 'background' color from the theme
                 Surface(color = MaterialTheme.colors.background) {
                     val navController = rememberNavController()
+                    LaunchedEffect(navController) {
+                        navigator.destinations.collect { event ->
+                            when (event) {
+                                is NavigationEvent.NavigateUp -> navController.navigateUp()
+                                is NavigationEvent.Directions -> navController.navigate(
+                                    event.destination,
+                                    event.builder
+                                )
+                            }
+                        }
+                    }
                     NavHost(
                         navController = navController,
                         startDestination = Const.SCREEN_LIST_TRIP

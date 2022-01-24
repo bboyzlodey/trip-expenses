@@ -102,6 +102,6 @@ fun CreateTripScreen(viewModel: CreateTripViewModel) {
 @Preview
 @Composable
 fun PreviewCreateTripScreen() {
-    val viewModel = CreateTripViewModel()
-    CreateTripScreen(viewModel = viewModel)
+//    val viewModel = CreateTripViewModel()
+//    CreateTripScreen(viewModel = viewModel)
 }

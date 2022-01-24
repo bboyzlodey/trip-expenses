@@ -1,5 +1,6 @@
 package com.skarlat.tripexpenses.ui.screen
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -48,12 +49,15 @@ fun TripList(trips: List<Trip>, onClick: (Trip) -> Unit, onCreateTripCLicked: ()
 
 @Composable
 fun TripListScreen(viewModel: TripListViewModel) {
-    val tripList by viewModel.tripListFlow.collectAsState()
+    val tripList by viewModel.tripListFlow.collectAsState(emptyList())
     TripList(
         trips = tripList,
         onClick = { viewModel.onTripCLicked(it.id) },
         onCreateTripCLicked = viewModel::onCreateTripClicked
     )
+    BackHandler() {
+        viewModel.onBackPressed()
+    }
 }
 
 @Preview

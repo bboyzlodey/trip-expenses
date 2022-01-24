@@ -4,6 +4,7 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.skarlat.tripexpenses.business.interactor.TripInteractor
 import com.skarlat.tripexpenses.ui.model.Participant
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -11,7 +12,7 @@ import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
-class CreateTripViewModel @Inject constructor(/*private val tripInteractor: TripInteractor*/) :
+class CreateTripViewModel @Inject constructor(private val tripInteractor: TripInteractor) :
     ViewModel() {
 
     private val tripParticipantsFlow = mutableStateListOf<Participant>()
@@ -24,7 +25,7 @@ class CreateTripViewModel @Inject constructor(/*private val tripInteractor: Trip
         viewModelScope.launch {
             val tripName = tripNameFlow.value
             if (tripName.isBlank()) return@launch showEmptyTripNameError()
-//            tripInteractor.createTrip(tripName, participants = tripParticipantsFlow)
+            tripInteractor.createTrip(tripName, participants = tripParticipantsFlow)
             navigateBack()
         }
     }
