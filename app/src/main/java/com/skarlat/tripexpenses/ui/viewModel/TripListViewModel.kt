@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.skarlat.tripexpenses.business.interactor.TripInteractor
 import com.skarlat.tripexpenses.ui.navigation.CreateTripDestination
+import com.skarlat.tripexpenses.ui.navigation.ExpenseListDestination
 import com.skarlat.tripexpenses.ui.navigation.Navigator
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
@@ -24,7 +25,8 @@ class TripListViewModel @Inject constructor(
     )
 
     fun onTripCLicked(tripId: String) {
-
+        val destination = ExpenseListDestination.createDestination(tripId)
+        navigator.navigate(destination.route())
     }
 
     fun onCreateTripClicked() {
