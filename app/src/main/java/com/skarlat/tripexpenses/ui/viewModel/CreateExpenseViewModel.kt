@@ -11,22 +11,27 @@ import com.skarlat.tripexpenses.ui.ExpenseDateMemento
 import com.skarlat.tripexpenses.ui.model.CreateExpenseCommand
 import com.skarlat.tripexpenses.ui.model.Distribution
 import com.skarlat.tripexpenses.ui.model.Participant
+import com.skarlat.tripexpenses.ui.navigation.Navigator
 import com.skarlat.tripexpenses.utils.Const
 import com.skarlat.tripexpenses.utils.DialogData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.properties.Delegates
 
 @HiltViewModel
 class CreateExpenseViewModel @Inject constructor(
     private val expenseInteractor: ExpenseInteractor,
     private val activityUtils: ActivityUtils,
     private val expenseDateMemento: ExpenseDateMemento,
-    private val costCalculator: ICostCalculator
+    private val costCalculator: ICostCalculator,
+    private val navigator: Navigator
 ) : ViewModel() {
 
-    var tripId = ""
+    var tripId by Delegates.observable("", { _, _, _ ->
+        loadParticipants()
+    })
 
     val expenseDate: StateFlow<String>
         get() = expenseDateMemento.readableDateFlow.stateIn(
@@ -42,9 +47,9 @@ class CreateExpenseViewModel @Inject constructor(
             0
         )
 
-    val expenseParticipantIds: Flow<List<String>> get() = expenseParticipantIdsMutableFlow
-    private val expenseParticipantIdsMutableFlow =
-        MutableStateFlow<List<String>>(listOf())
+//    val expenseParticipantIds: Flow<List<String>> get() = expenseParticipantIdsMutableFlow
+//    private val expenseParticipantIdsMutableFlow =
+//        MutableStateFlow<List<String>>(listOf())
 
     val participants: StateFlow<List<Participant>> get() = participantsMutableFlow
     private val participantsMutableFlow = MutableStateFlow<List<Participant>>(emptyList())
@@ -61,6 +66,13 @@ class CreateExpenseViewModel @Inject constructor(
         }
     }
 
+    private fun loadParticipants() {
+        viewModelScope.launch {
+            expenseInteractor.getTripParticipantsFlow(tripId)
+                .collect { participantsMutableFlow.emit(it) }
+        }
+    }
+
     fun onCostChanged(cost: String, costId: String) {
         viewModelScope.launch {
             costCalculator.onCostChanged(costId, cost)
@@ -70,8 +82,8 @@ class CreateExpenseViewModel @Inject constructor(
     @Deprecated("Unused method")
     fun onParticipantOfExpenseClicked(item: Participant) {
         viewModelScope.launch {
-            val participants = expenseParticipantIds.first()
-            expenseParticipantIdsMutableFlow.emit(participants.addOrRemove(item.id))
+//            val participants = expenseParticipantIds.first()
+//            expenseParticipantIdsMutableFlow.emit(participants.addOrRemove(item.id))
         }
     }
 
@@ -133,7 +145,7 @@ class CreateExpenseViewModel @Inject constructor(
     }
 
     private fun expenseCreatedSuccess() {
-        // TODO
+        navigator.navigateUp()
     }
 
     private fun expenseCreatedFailure(error: Throwable?) {

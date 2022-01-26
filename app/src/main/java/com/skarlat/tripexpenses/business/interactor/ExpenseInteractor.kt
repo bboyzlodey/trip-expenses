@@ -43,7 +43,11 @@ class ExpenseInteractor @Inject constructor(
         return flowOf(expenseRepository.getExpenses(tripId).mapToUIModel())
     }
 
-    suspend fun getTripParticipants(tripId: String): Flow<List<Participant>> {
+    suspend fun getTripParticipantsFlow(tripId: String): Flow<List<Participant>> {
         return flow { emit(participantRepository.getParticipants(tripId).mapToUIModel()) }
+    }
+
+    suspend fun getTripParticipants(tripId: String): List<Participant> {
+        return participantRepository.getParticipants(tripId).mapToUIModel()
     }
 }

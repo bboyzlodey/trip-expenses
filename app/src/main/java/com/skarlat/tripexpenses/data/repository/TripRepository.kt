@@ -18,6 +18,12 @@ class TripRepository @Inject constructor(private val tripDAO: TripDAO) : ITripRe
         }
     }
 
+    override suspend fun getTrip(tripId: String): Trip {
+        return withContext(Dispatchers.IO) {
+            tripDAO.getTrip(tripId)
+        }
+    }
+
     override fun getTripsFlow(): Flow<List<Trip>> {
         return tripDAO.getTripsFlow().flowOn(Dispatchers.IO)
     }

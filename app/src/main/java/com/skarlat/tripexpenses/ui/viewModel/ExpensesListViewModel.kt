@@ -3,7 +3,9 @@ package com.skarlat.tripexpenses.ui.viewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.skarlat.tripexpenses.business.interactor.ExpenseInteractor
+import com.skarlat.tripexpenses.business.interactor.TripInteractor
 import com.skarlat.tripexpenses.ui.model.Expense
+import com.skarlat.tripexpenses.ui.model.TripInfo
 import com.skarlat.tripexpenses.ui.navigation.CreateExpenseDestination
 import com.skarlat.tripexpenses.ui.navigation.Navigator
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,17 +18,24 @@ import javax.inject.Inject
 @HiltViewModel
 class ExpensesListViewModel @Inject constructor(
     private val expenseInteractor: ExpenseInteractor,
-    private val navigator: Navigator
+    private val navigator: Navigator,
+    private val tripInteractor: TripInteractor
 ) : ViewModel() {
 
     val expensesList: StateFlow<List<Expense>> get() = expensesListFlow
     private val expensesListFlow = MutableStateFlow(emptyList<Expense>())
+
+
+    val tripInfo: StateFlow<TripInfo> get() = tripInfoFlow
+    private val tripInfoFlow =
+        MutableStateFlow<TripInfo>(TripInfo(name = "", participantsName = emptyList()))
 
     private var tripId: String = ""
 
     fun openTripId(tripId: String) {
         this.tripId = tripId
         loadExpenseItems()
+        loadTripInfo()
     }
 
     private fun loadExpenseItems() {
@@ -36,6 +45,18 @@ class ExpensesListViewModel @Inject constructor(
                 .collect {
                     expensesListFlow.emit(it)
                 }
+        }
+    }
+
+    private fun loadTripInfo() {
+        viewModelScope.launch {
+            val participants = expenseInteractor.getTripParticipants(tripId)
+            val trip = tripInteractor.getTrip(tripId)
+            tripInfoFlow.emit(
+                TripInfo(
+                    name = trip.name,
+                    participantsName = participants.map { it.name })
+            )
         }
     }
 

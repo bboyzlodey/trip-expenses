@@ -74,7 +74,7 @@ class MainActivity : AppCompatActivity() /*,ComponentActivity()*/ {
                         }
                         composable(route = Const.SCREEN_CREATE_EXPENSE) { navBackStackEntry ->
                             val viewModel = hiltViewModel<CreateExpenseViewModel>()
-                            val tripId = navBackStackEntry.arguments?.getString("tripID") ?: ""
+                            val tripId = navBackStackEntry.arguments?.getString("tripId") ?: ""
                             LaunchedEffect(key1 = tripId, block = {
                                 viewModel.tripId = tripId
                             })
