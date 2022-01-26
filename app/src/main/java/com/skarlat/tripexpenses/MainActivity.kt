@@ -19,6 +19,7 @@ import com.skarlat.tripexpenses.ui.screen.CreateTripScreen
 import com.skarlat.tripexpenses.ui.screen.ExpenseListScreen
 import com.skarlat.tripexpenses.ui.screen.TripListScreen
 import com.skarlat.tripexpenses.ui.theme.TripExpensesTheme
+import com.skarlat.tripexpenses.ui.viewModel.CreateExpenseViewModel
 import com.skarlat.tripexpenses.ui.viewModel.ExpensesListViewModel
 import com.skarlat.tripexpenses.ui.viewModel.MainViewModel
 import com.skarlat.tripexpenses.utils.Const
@@ -72,7 +73,12 @@ class MainActivity : AppCompatActivity() /*,ComponentActivity()*/ {
                             ExpenseListScreen(viewModel)
                         }
                         composable(route = Const.SCREEN_CREATE_EXPENSE) { navBackStackEntry ->
-                            CreateExpenseScreen(viewModel = hiltViewModel())
+                            val viewModel = hiltViewModel<CreateExpenseViewModel>()
+                            val tripId = navBackStackEntry.arguments?.getString("tripID") ?: ""
+                            LaunchedEffect(key1 = tripId, block = {
+                                viewModel.tripId = tripId
+                            })
+                            CreateExpenseScreen(viewModel = viewModel)
                         }
                     }
                 }

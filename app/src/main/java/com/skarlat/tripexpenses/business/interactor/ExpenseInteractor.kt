@@ -25,14 +25,12 @@ class ExpenseInteractor @Inject constructor(
     private val participantRepository: IParticipantRepository
 ) {
 
-    private var currentTripId = ""
-
     suspend fun createExpense(screenData: CreateExpenseCommand) {
         val expense = ExpenseEntity(
             id = UUID.randomUUID().toString(),
             ownerId = screenData.payOwnerId,
             description = "",
-            tripId = currentTripId,
+            tripId = screenData.tripId,
             amount = screenData.totalAmount,
             date = Instant.now().toString()
         )
@@ -48,5 +46,4 @@ class ExpenseInteractor @Inject constructor(
     suspend fun getTripParticipants(tripId: String): Flow<List<Participant>> {
         return flow { emit(participantRepository.getParticipants(tripId).mapToUIModel()) }
     }
-
 }

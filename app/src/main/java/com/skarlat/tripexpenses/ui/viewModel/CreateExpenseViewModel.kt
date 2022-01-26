@@ -26,6 +26,8 @@ class CreateExpenseViewModel @Inject constructor(
     private val costCalculator: ICostCalculator
 ) : ViewModel() {
 
+    var tripId = ""
+
     val expenseDate: StateFlow<String>
         get() = expenseDateMemento.readableDateFlow.stateIn(
             scope = viewModelScope,
@@ -125,7 +127,8 @@ class CreateExpenseViewModel @Inject constructor(
             date = expenseDateMemento.getSelectedDateISO(),
             totalAmount = expenseSummaryCost.value,
             distributions = distribution,
-            payOwnerId = payOwnerId.value
+            payOwnerId = payOwnerId.value,
+            tripId = tripId
         )
     }
 

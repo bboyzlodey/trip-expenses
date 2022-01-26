@@ -12,6 +12,10 @@ object CreateTripDestination : NavigationDestination {
 
 object CreateExpenseDestination : NavigationDestination {
     override fun route(): String = Const.SCREEN_CREATE_EXPENSE
+
+    fun createDestination(tripId: String) = NavigationDestination {
+        "createExpense/$tripId"
+    }
 }
 
 object ExpenseListDestination : NavigationDestination {
