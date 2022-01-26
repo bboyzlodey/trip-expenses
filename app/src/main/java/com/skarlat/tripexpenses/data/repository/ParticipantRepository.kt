@@ -18,7 +18,7 @@ class ParticipantRepository @Inject constructor(private val participantDAO: Part
 
     override suspend fun getParticipants(tripId: String): List<Participant> {
         return withContext(Dispatchers.IO) {
-            getParticipants(tripId)
+             participantDAO.getParticipants(tripId)
         }
     }
 }
