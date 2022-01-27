@@ -15,4 +15,7 @@
 	<string name="partipants_of_trip">Участники путешествия:</string>
 	<string name="add_expense">Добавить расход</string>
 	<string name="participants">Участники:</string>
+	<string name="description_expense">Описание затраты:</string>
+	<string name="debtors">Задолжники:</string>
+	<string name="mark_debtor_as_payed">долг заплачен</string>
 </resources>
