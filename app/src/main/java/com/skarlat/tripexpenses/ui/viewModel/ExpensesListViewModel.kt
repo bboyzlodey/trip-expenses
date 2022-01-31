@@ -7,6 +7,7 @@ import com.skarlat.tripexpenses.business.interactor.TripInteractor
 import com.skarlat.tripexpenses.ui.model.Expense
 import com.skarlat.tripexpenses.ui.model.TripInfo
 import com.skarlat.tripexpenses.ui.navigation.CreateExpenseDestination
+import com.skarlat.tripexpenses.ui.navigation.ExpenseDestination
 import com.skarlat.tripexpenses.ui.navigation.Navigator
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -61,7 +62,8 @@ class ExpensesListViewModel @Inject constructor(
     }
 
     fun onExpenseClicked(expenseId: String) {
-
+        val destination = ExpenseDestination.createDestination(expenseId)
+        navigator.navigate(destination.route())
     }
 
     fun onCreateExpenseClicked() {

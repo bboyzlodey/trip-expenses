@@ -12,14 +12,13 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.skarlat.tripexpenses.ui.navigation.ExpenseDestination
 import com.skarlat.tripexpenses.ui.navigation.NavigationEvent
 import com.skarlat.tripexpenses.ui.navigation.Navigator
-import com.skarlat.tripexpenses.ui.screen.CreateExpenseScreen
-import com.skarlat.tripexpenses.ui.screen.CreateTripScreen
-import com.skarlat.tripexpenses.ui.screen.ExpenseListScreen
-import com.skarlat.tripexpenses.ui.screen.TripListScreen
+import com.skarlat.tripexpenses.ui.screen.*
 import com.skarlat.tripexpenses.ui.theme.TripExpensesTheme
 import com.skarlat.tripexpenses.ui.viewModel.CreateExpenseViewModel
+import com.skarlat.tripexpenses.ui.viewModel.ExpenseViewModel
 import com.skarlat.tripexpenses.ui.viewModel.ExpensesListViewModel
 import com.skarlat.tripexpenses.ui.viewModel.MainViewModel
 import com.skarlat.tripexpenses.utils.Const
@@ -63,6 +62,15 @@ class MainActivity : AppCompatActivity() /*,ComponentActivity()*/ {
                         }
                         composable(route = Const.SCREEN_CREATE_TRIP) { navBackStackEntry ->
                             CreateTripScreen(viewModel = hiltViewModel())
+                        }
+                        composable(route = ExpenseDestination.route()) { navBackStackEntry ->
+                            val viewModel = hiltViewModel<ExpenseViewModel>()
+                            val expenseId =
+                                navBackStackEntry.arguments?.getString("expenseId") ?: ""
+                            LaunchedEffect(key1 = expenseId, block = {
+                                viewModel.openExpense(expenseId)
+                            })
+                            ExpenseInfoScreen(viewModel = viewModel)
                         }
                         composable(route = Const.SCREEN_LIST_EXPENSES) { navBackStackEntry ->
                             val viewModel = hiltViewModel<ExpensesListViewModel>()

@@ -6,6 +6,8 @@ import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -19,6 +21,13 @@ import com.skarlat.tripexpenses.utils.MockHelper
 
 @Composable
 fun ExpenseInfoScreen(viewModel: ExpenseViewModel) {
+    val expenseInfo by viewModel.expenseInfo.collectAsState()
+    ExpenseInfo(
+        description = expenseInfo.description,
+        debtors = expenseInfo.debtors,
+        totalAmount = expenseInfo.amount,
+        onDebtPaidClicked = viewModel::markDebtAsPaid
+    )
 }
 
 @Composable
