@@ -12,8 +12,8 @@ import javax.inject.Singleton
 class DateFormatter @Inject constructor() {
 
     companion object Formats {
-        const val DD_MMM = "DD MMM"
-        const val DD_MM_YY = "DD.MM.YY"
+        const val DD_MMM = "dd MMM"
+        const val DD_MM_YY = "dd.MM.YY"
     }
 
     fun formatFromInstant(millis: Long, format: String): String {

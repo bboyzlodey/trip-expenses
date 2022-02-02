@@ -1,11 +1,13 @@
 package com.skarlat.tripexpenses
 
 import com.skarlat.tripexpenses.utils.DateFormatter
-import org.junit.Test
-import java.util.*
 import org.junit.Assert.assertEquals
 import org.junit.Before
+import org.junit.Test
+import java.time.Instant
+import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import java.util.*
 
 class DateFormatterTest {
 
@@ -39,8 +41,17 @@ class DateFormatterTest {
             set(Calendar.HOUR_OF_DAY, 0)
             set(Calendar.MINUTE, 0)
         }
-        val factResult = dateFormatter.formatFromInstant(calendar.timeInMillis, DateTimeFormatter.ISO_LOCAL_DATE)
+        val factResult =
+            dateFormatter.formatFromInstant(calendar.timeInMillis, DateTimeFormatter.ISO_LOCAL_DATE)
         val actualResult = "2022-01-15"
+        assertEquals(factResult, actualResult)
+    }
+
+    @Test
+    fun now() {
+        val actualResult = DateTimeFormatter.ofPattern("dd MMM").format(LocalDate.now())
+        val factResult =
+            dateFormatter.formatFromInstant(Instant.now().toEpochMilli(), DateFormatter.DD_MMM)
         assertEquals(factResult, actualResult)
     }
 }
