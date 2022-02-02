@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Button
+import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
@@ -36,8 +37,16 @@ fun CreateExpenseScreen(viewModel: CreateExpenseViewModel) {
             .fillMaxWidth()
     ) {
         item {
+            val description by viewModel.expenseDescription.collectAsState()
+            Text(text = stringResource(id = R.string.description_expense))
+            OutlinedTextField(
+                value = description,
+                onValueChange = viewModel::onExpenseDescriptionChanged,
+                modifier = Modifier.padding(top = 8.dp, bottom = 16.dp)
+            )
+        }
+        item {
             val date by viewModel.expenseDate.collectAsState()
-
             Text(text = stringResource(id = R.string.date))
             TextButton(
                 onClick = { viewModel.onSelectDateClicked() },
@@ -69,7 +78,12 @@ fun CreateExpenseScreen(viewModel: CreateExpenseViewModel) {
                 onRemoveClicked = { viewModel.onRemoveDistributionCLicked(item) },
                 participants = participants,
                 isSupportDeleting = distributions.size > 1,
-                onDistributionValueChanged = { viewModel.onCostChanged(costId = item.id.toString(), cost = it) }
+                onDistributionValueChanged = {
+                    viewModel.onCostChanged(
+                        costId = item.id.toString(),
+                        cost = it
+                    )
+                }
             )
         }
 

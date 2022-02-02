@@ -29,9 +29,9 @@ class CreateExpenseViewModel @Inject constructor(
     private val navigator: Navigator
 ) : ViewModel() {
 
-    var tripId by Delegates.observable("", { _, _, _ ->
+    var tripId by Delegates.observable("") { _, _, _ ->
         loadParticipants()
-    })
+    }
 
     val expenseDate: StateFlow<String>
         get() = expenseDateMemento.readableDateFlow.stateIn(
@@ -47,6 +47,8 @@ class CreateExpenseViewModel @Inject constructor(
             0
         )
 
+    val expenseDescription: StateFlow<String> get() = expenseDescriptionFlow
+    private val expenseDescriptionFlow = MutableStateFlow("")
 //    val expenseParticipantIds: Flow<List<String>> get() = expenseParticipantIdsMutableFlow
 //    private val expenseParticipantIdsMutableFlow =
 //        MutableStateFlow<List<String>>(listOf())
@@ -77,6 +79,10 @@ class CreateExpenseViewModel @Inject constructor(
         viewModelScope.launch {
             costCalculator.onCostChanged(costId, cost)
         }
+    }
+
+    fun onExpenseDescriptionChanged(newDescription: String) {
+        expenseDescriptionFlow.value = newDescription
     }
 
     @Deprecated("Unused method")
@@ -140,7 +146,8 @@ class CreateExpenseViewModel @Inject constructor(
             totalAmount = expenseSummaryCost.value,
             distributions = distribution,
             payOwnerId = payOwnerId.value,
-            tripId = tripId
+            tripId = tripId,
+            description = expenseDescriptionFlow.value
         )
     }
 

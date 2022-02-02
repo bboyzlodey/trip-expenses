@@ -32,7 +32,7 @@ class ExpenseInteractor @Inject constructor(
         val expense = ExpenseEntity(
             id = UUID.randomUUID().toString(),
             ownerId = screenData.payOwnerId,
-            description = "",
+            description = screenData.description,
             tripId = screenData.tripId,
             amount = screenData.totalAmount,
             date = Instant.now().toString()
@@ -60,7 +60,7 @@ class ExpenseInteractor @Inject constructor(
         val expense = expenseRepository.getExpense(expenseId)
         val debtors = debtorRepository.getDebtors(expenseId)
         return ExpenseInfoUIModel(
-            description = "TODO",
+            description = expense.description,
             debtors = debtors.mapToUIModel(),
             amount = expense.amount,
             debt = debtors.sumOf { if (it.debtor.isDebtPayed) 0 else it.debtor.debtAmount }

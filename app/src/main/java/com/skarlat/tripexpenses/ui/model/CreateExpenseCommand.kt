@@ -5,5 +5,6 @@ data class CreateExpenseCommand(
     val totalAmount: Int,
     val distributions: List<Distribution>,
     val payOwnerId: String,
-    val tripId: String
+    val tripId: String,
+    val description: String
 )
