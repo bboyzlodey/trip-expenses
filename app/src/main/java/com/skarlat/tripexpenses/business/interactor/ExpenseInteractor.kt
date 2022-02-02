@@ -9,6 +9,7 @@ import com.skarlat.tripexpenses.data.repository.IParticipantRepository
 import com.skarlat.tripexpenses.ui.model.CreateExpenseCommand
 import com.skarlat.tripexpenses.ui.model.Expense
 import com.skarlat.tripexpenses.ui.model.Participant
+import com.skarlat.tripexpenses.utils.StringResourceWrapper
 import dagger.hilt.android.scopes.ActivityRetainedScoped
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -17,12 +18,14 @@ import java.time.Instant
 import java.util.*
 import javax.inject.Inject
 import com.skarlat.tripexpenses.data.local.entity.Expense as ExpenseEntity
+import com.skarlat.tripexpenses.ui.model.ExpenseInfo as ExpenseInfoUIModel
 
 @ActivityRetainedScoped
 class ExpenseInteractor @Inject constructor(
     private val expenseRepository: IExpenseRepository,
     private val debtorRepository: IDebtorRepository,
-    private val participantRepository: IParticipantRepository
+    private val participantRepository: IParticipantRepository,
+    private val stringResourceWrapper: StringResourceWrapper
 ) {
 
     suspend fun createExpense(screenData: CreateExpenseCommand) {
@@ -44,10 +47,23 @@ class ExpenseInteractor @Inject constructor(
     }
 
     suspend fun getTripParticipantsFlow(tripId: String): Flow<List<Participant>> {
-        return flow { emit(participantRepository.getParticipants(tripId).mapToUIModel()) }
+        return flow {
+            emit(participantRepository.getParticipants(tripId).mapToUIModel(stringResourceWrapper))
+        }
     }
 
     suspend fun getTripParticipants(tripId: String): List<Participant> {
-        return participantRepository.getParticipants(tripId).mapToUIModel()
+        return participantRepository.getParticipants(tripId).mapToUIModel(stringResourceWrapper)
+    }
+
+    suspend fun getExpenseInfo(expenseId: String): ExpenseInfoUIModel {
+        val expense = expenseRepository.getExpense(expenseId)
+        val debtors = debtorRepository.getDebtors(expenseId)
+        return ExpenseInfoUIModel(
+            description = "TODO",
+            debtors = debtors.mapToUIModel(),
+            amount = expense.amount,
+            debt = debtors.sumOf { if (it.debtor.isDebtPayed) 0 else it.debtor.debtAmount }
+        )
     }
 }

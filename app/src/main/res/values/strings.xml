@@ -18,4 +18,5 @@
 	<string name="description_expense">Описание затраты:</string>
 	<string name="debtors">Задолжники:</string>
 	<string name="mark_debtor_as_payed">долг заплачен</string>
+	<string name="my_self">Я</string>
 </resources>

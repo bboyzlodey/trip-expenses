@@ -2,6 +2,7 @@ package com.skarlat.tripexpenses.ui.viewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.skarlat.tripexpenses.R
 import com.skarlat.tripexpenses.business.interactor.ExpenseInteractor
 import com.skarlat.tripexpenses.business.interactor.TripInteractor
 import com.skarlat.tripexpenses.ui.model.Expense
@@ -9,6 +10,8 @@ import com.skarlat.tripexpenses.ui.model.TripInfo
 import com.skarlat.tripexpenses.ui.navigation.CreateExpenseDestination
 import com.skarlat.tripexpenses.ui.navigation.ExpenseDestination
 import com.skarlat.tripexpenses.ui.navigation.Navigator
+import com.skarlat.tripexpenses.utils.Const
+import com.skarlat.tripexpenses.utils.StringResourceWrapper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -20,7 +23,8 @@ import javax.inject.Inject
 class ExpensesListViewModel @Inject constructor(
     private val expenseInteractor: ExpenseInteractor,
     private val navigator: Navigator,
-    private val tripInteractor: TripInteractor
+    private val tripInteractor: TripInteractor,
+    private val stringResourceWrapper: StringResourceWrapper
 ) : ViewModel() {
 
     val expensesList: StateFlow<List<Expense>> get() = expensesListFlow
@@ -53,10 +57,11 @@ class ExpensesListViewModel @Inject constructor(
         viewModelScope.launch {
             val participants = expenseInteractor.getTripParticipants(tripId)
             val trip = tripInteractor.getTrip(tripId)
+            val selfName = stringResourceWrapper.getString(R.string.my_self)
             tripInfoFlow.emit(
                 TripInfo(
                     name = trip.name,
-                    participantsName = participants.map { it.name })
+                    participantsName = participants.map { if (it.id == Const.SELF_ID) selfName else it.name })
             )
         }
     }

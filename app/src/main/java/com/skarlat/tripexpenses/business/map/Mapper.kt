@@ -1,14 +1,18 @@
 package com.skarlat.tripexpenses.business.map
 
+import com.skarlat.tripexpenses.R
 import com.skarlat.tripexpenses.business.calculator.IDebtorCalculator
-import com.skarlat.tripexpenses.data.local.entity.ExpenseDebtor
 import com.skarlat.tripexpenses.ui.model.Distribution
 import com.skarlat.tripexpenses.ui.model.Participant
 import com.skarlat.tripexpenses.utils.Const
+import com.skarlat.tripexpenses.utils.StringResourceWrapper
 import java.util.*
 import com.skarlat.tripexpenses.data.local.entity.Expense as ExpenseEntity
+import com.skarlat.tripexpenses.data.local.entity.ExpenseDebtor as DebtorBusinessModel
 import com.skarlat.tripexpenses.data.local.entity.Participant as EntityParticipant
 import com.skarlat.tripexpenses.data.local.entity.Trip as TripEntity
+import com.skarlat.tripexpenses.data.local.model.DebtorInfo as DebtorInfoBusinessModel
+import com.skarlat.tripexpenses.ui.model.Debtor as DebtorUIModel
 import com.skarlat.tripexpenses.ui.model.Expense as ExpenseUIModel
 import com.skarlat.tripexpenses.ui.model.Trip as TripUIModel
 
@@ -49,10 +53,10 @@ fun Iterable<Participant>.mapToEntity(tripId: String): List<EntityParticipant> {
 fun Iterable<Distribution>.mapToEntity(
     expenseId: String,
     debtCalculator: IDebtorCalculator
-): List<ExpenseDebtor> {
+): List<DebtorBusinessModel> {
     val debtorMap = debtCalculator.calculateDebits(this)
     return debtorMap.map { debtorEntry ->
-        ExpenseDebtor(
+        DebtorBusinessModel(
             id = UUID.randomUUID().toString(),
             expenseId = expenseId,
             debtAmount = debtorEntry.value,
@@ -63,6 +67,26 @@ fun Iterable<Distribution>.mapToEntity(
 }
 
 @JvmName("mapToUIModelEntityParticipant")
-fun Iterable<EntityParticipant>.mapToUIModel(): List<Participant> {
-    return map { Participant(name = it.name, id = it.id) }
+fun Iterable<EntityParticipant>.mapToUIModel(stringResourceWrapper: StringResourceWrapper): List<Participant> {
+    return map {
+        Participant(
+            name = if (it.name == Const.SELF_ID) stringResourceWrapper.getString(R.string.my_self) else it.name,
+            id = it.id
+        )
+    }
+}
+
+@JvmName("mapToUIModelExpenseDebtor")
+fun Iterable<DebtorInfoBusinessModel>.mapToUIModel(): List<DebtorUIModel> {
+    return map {
+        DebtorUIModel(
+            participant = Participant(
+                name = it.participant.name,
+                id = it.participant.name
+            ),
+            amount = it.debtor.debtAmount,
+            isPayed = it.debtor.isDebtPayed,
+            id = it.debtor.id
+        )
+    }
 }

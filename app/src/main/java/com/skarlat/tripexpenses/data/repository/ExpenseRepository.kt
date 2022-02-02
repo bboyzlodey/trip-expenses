@@ -2,7 +2,6 @@ package com.skarlat.tripexpenses.data.repository
 
 import com.skarlat.tripexpenses.data.local.database.ExpenseDAO
 import com.skarlat.tripexpenses.data.local.entity.Expense
-import com.skarlat.tripexpenses.data.local.model.ExpenseInfo
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -23,9 +22,7 @@ class ExpenseRepository @Inject constructor(private val expenseDao: ExpenseDAO) 
         }
     }
 
-    override suspend fun getExpenseInfo(expenseId: String): ExpenseInfo {
-        return withContext(Dispatchers.IO) {
-            expenseDao.getExpenseInfo(expenseId)
-        }
+    override suspend fun getExpense(expenseId: String): Expense {
+        return expenseDao.getExpense(expenseId)
     }
 }

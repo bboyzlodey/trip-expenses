@@ -5,7 +5,6 @@ import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Transaction
 import com.skarlat.tripexpenses.data.local.entity.Expense
-import com.skarlat.tripexpenses.data.local.model.ExpenseInfo
 import com.skarlat.tripexpenses.data.local.model.TripExpenses
 
 @Dao
@@ -20,7 +19,7 @@ interface ExpenseDAO {
 
     @Transaction
     @Query("SELECT * FROM expense WHERE expense_id = :expenseId")
-    suspend fun getExpenseInfo(expenseId: String) : ExpenseInfo
+    suspend fun getExpense(expenseId: String): Expense
 
     @Insert
     suspend fun insertExpense(expense: Expense)

@@ -27,11 +27,12 @@ class ExpenseViewModel @Inject constructor(
 
     private fun loadExpense() {
         viewModelScope.launch {
-            expenseInteractor
+            val expenseInfo = expenseInteractor.getExpenseInfo(expenseId)
+            expenseInfoFlow.emit(expenseInfo)
         }
     }
 
     fun markDebtAsPaid(debtId: String) {
-
+        /*TODO*/
     }
 }
