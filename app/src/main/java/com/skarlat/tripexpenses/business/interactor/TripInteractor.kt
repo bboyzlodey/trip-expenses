@@ -9,7 +9,6 @@ import com.skarlat.tripexpenses.ui.model.Participant
 import com.skarlat.tripexpenses.utils.Const
 import dagger.hilt.android.scopes.ActivityRetainedScoped
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import java.util.*
 import javax.inject.Inject
@@ -41,10 +40,6 @@ class TripInteractor @Inject constructor(
         debt = 0,
         name = tripName
     )
-
-    suspend fun getTripList(): Flow<List<com.skarlat.tripexpenses.ui.model.Trip>> {
-        return flowOf(tripRepository.getTrips().mapToUIModel())
-    }
 
     fun getTripListFlow(): Flow<List<com.skarlat.tripexpenses.ui.model.Trip>> {
         return tripRepository.getTripsFlow().map { it.mapToUIModel() }

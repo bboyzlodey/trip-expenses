@@ -8,13 +8,17 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.skarlat.tripexpenses.business.interactor.TripInteractor
 import com.skarlat.tripexpenses.ui.model.Participant
+import com.skarlat.tripexpenses.ui.navigation.Navigator
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
-class CreateTripViewModel @Inject constructor(private val tripInteractor: TripInteractor) :
+class CreateTripViewModel @Inject constructor(
+    private val tripInteractor: TripInteractor,
+    private val navigator: Navigator
+) :
     ViewModel() {
 
     private val tripParticipantsFlow = mutableStateListOf<Participant>()
@@ -51,7 +55,7 @@ class CreateTripViewModel @Inject constructor(private val tripInteractor: TripIn
     private fun getEmptyParticipant() = Participant(id = UUID.randomUUID().toString(), name = "")
 
     private fun navigateBack() {
-
+        navigator.navigateUp()
     }
 
     private fun showEmptyTripNameError() {

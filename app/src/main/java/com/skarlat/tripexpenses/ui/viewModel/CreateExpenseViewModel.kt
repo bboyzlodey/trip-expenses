@@ -49,9 +49,6 @@ class CreateExpenseViewModel @Inject constructor(
 
     val expenseDescription: StateFlow<String> get() = expenseDescriptionFlow
     private val expenseDescriptionFlow = MutableStateFlow("")
-//    val expenseParticipantIds: Flow<List<String>> get() = expenseParticipantIdsMutableFlow
-//    private val expenseParticipantIdsMutableFlow =
-//        MutableStateFlow<List<String>>(listOf())
 
     val participants: StateFlow<List<Participant>> get() = participantsMutableFlow
     private val participantsMutableFlow = MutableStateFlow<List<Participant>>(emptyList())
@@ -83,14 +80,6 @@ class CreateExpenseViewModel @Inject constructor(
 
     fun onExpenseDescriptionChanged(newDescription: String) {
         expenseDescriptionFlow.value = newDescription
-    }
-
-    @Deprecated("Unused method")
-    fun onParticipantOfExpenseClicked(item: Participant) {
-        viewModelScope.launch {
-//            val participants = expenseParticipantIds.first()
-//            expenseParticipantIdsMutableFlow.emit(participants.addOrRemove(item.id))
-        }
     }
 
     fun onSelectDateClicked() {
@@ -157,12 +146,5 @@ class CreateExpenseViewModel @Inject constructor(
 
     private fun expenseCreatedFailure(error: Throwable?) {
         // TODO
-    }
-
-    private fun List<String>.addOrRemove(key: String): List<String> {
-        return this.toMutableList().apply {
-            if (!this.removeIf { it == key })
-                this.add(key)
-        }
     }
 }
