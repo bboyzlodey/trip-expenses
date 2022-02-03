@@ -5,6 +5,7 @@ import com.skarlat.tripexpenses.business.calculator.IDebtorCalculator
 import com.skarlat.tripexpenses.ui.model.Distribution
 import com.skarlat.tripexpenses.ui.model.Participant
 import com.skarlat.tripexpenses.utils.Const
+import com.skarlat.tripexpenses.utils.DateFormatter
 import com.skarlat.tripexpenses.utils.StringResourceWrapper
 import java.util.*
 import com.skarlat.tripexpenses.data.local.entity.Expense as ExpenseEntity
@@ -26,11 +27,11 @@ fun Iterable<TripEntity>.mapToUIModel(): List<TripUIModel> {
 }
 
 @JvmName("mapToUIModelExpenseEntity")
-fun Iterable<ExpenseEntity>.mapToUIModel(): List<ExpenseUIModel> {
+fun Iterable<ExpenseEntity>.mapToUIModel(dateFormatter: DateFormatter): List<ExpenseUIModel> {
     return mapNotNull { entity: ExpenseEntity ->
         ExpenseUIModel(
             id = entity.id,
-            date = entity.date,
+            date = dateFormatter.formatDateFromISO(entity.date),
             isPayed = false,
             amount = "${entity.amount} RUB",
             debt = "0 RUB"

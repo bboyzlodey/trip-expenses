@@ -24,6 +24,11 @@ class DateFormatter @Inject constructor() {
         return formatter.format(LocalDateTime.ofInstant(millis.toInstant(), ZoneId.systemDefault()))
     }
 
+    fun formatDateFromISO(date: String): String {
+        return DateTimeFormatter.ofPattern(DD_MM_YY)
+            .format(DateTimeFormatter.ISO_LOCAL_DATE.parse(date))
+    }
+
     private fun Long.toInstant(): Instant = Instant.ofEpochMilli(this)
 
     private fun format(pattern: String, temporalAccessor: TemporalAccessor): String {
