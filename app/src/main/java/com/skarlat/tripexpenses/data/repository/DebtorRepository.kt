@@ -3,6 +3,7 @@ package com.skarlat.tripexpenses.data.repository
 import com.skarlat.tripexpenses.data.local.database.DebtorDAO
 import com.skarlat.tripexpenses.data.local.entity.ExpenseDebtor
 import com.skarlat.tripexpenses.data.local.model.DebtorInfo
+import com.skarlat.tripexpenses.data.local.model.DebtorPaidRequest
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -25,6 +26,12 @@ class DebtorRepository @Inject constructor(private val debtorDAO: DebtorDAO) : I
     override suspend fun getDebtors(expenseId: String): List<DebtorInfo> {
         return withContext(Dispatchers.IO) {
             debtorDAO.getExpenseDebtors(expenseId)
+        }
+    }
+
+    override suspend fun updateDebtor(request: DebtorPaidRequest) {
+        withContext(Dispatchers.IO) {
+            debtorDAO.updateDebtor(request)
         }
     }
 }

@@ -9,6 +9,7 @@ import com.skarlat.tripexpenses.data.local.entity.Expense
 import com.skarlat.tripexpenses.data.local.entity.ExpenseDebtor
 import com.skarlat.tripexpenses.data.local.entity.Participant
 import com.skarlat.tripexpenses.data.local.model.DebtorInfo
+import com.skarlat.tripexpenses.data.local.model.DebtorPaidRequest
 import com.skarlat.tripexpenses.data.local.model.ExpenseInfoItem
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.asExecutor
@@ -176,6 +177,19 @@ class AppDatabaseTest {
                 description = "Кафе3"
             ),
         )
+        assertEquals(factResult, actualResult)
+    }
+
+    @Test
+    fun updateDebtorTable_DebtorPaidRequest() = testScope.runBlockingTest {
+        val mockedDebtor = ExpenseDebtor("id", "some_expense", 100, "some_id", false)
+
+        db.debtorDAO.insertAll(mockedDebtor)
+        db.debtorDAO.updateDebtor(DebtorPaidRequest(mockedDebtor.id, true))
+
+        val factResult = db.debtorDAO.getExpenseDebtor(mockedDebtor.id)
+        val actualResult = mockedDebtor.copy(isDebtPayed = false)
+
         assertEquals(factResult, actualResult)
     }
 }

@@ -3,6 +3,7 @@ package com.skarlat.tripexpenses.business.interactor
 import com.skarlat.tripexpenses.business.calculator.DebtCalculator
 import com.skarlat.tripexpenses.business.map.mapToEntity
 import com.skarlat.tripexpenses.business.map.mapToUIModel
+import com.skarlat.tripexpenses.data.local.model.DebtorPaidRequest
 import com.skarlat.tripexpenses.data.repository.IDebtorRepository
 import com.skarlat.tripexpenses.data.repository.IExpenseRepository
 import com.skarlat.tripexpenses.data.repository.IParticipantRepository
@@ -69,5 +70,9 @@ class ExpenseInteractor @Inject constructor(
             amount = expense.amount,
             debt = debtors.sumOf { if (it.debtor.isDebtPayed) 0 else it.debtor.debtAmount }
         )
+    }
+
+    suspend fun markDebtAsPaid(debtId: String) {
+        debtorRepository.updateDebtor(DebtorPaidRequest(id = debtId, isDebtPayed = true))
     }
 }

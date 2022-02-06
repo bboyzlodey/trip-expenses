@@ -1,11 +1,9 @@
 package com.skarlat.tripexpenses.data.local.database
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.Query
-import androidx.room.Transaction
+import androidx.room.*
 import com.skarlat.tripexpenses.data.local.entity.ExpenseDebtor
 import com.skarlat.tripexpenses.data.local.model.DebtorInfo
+import com.skarlat.tripexpenses.data.local.model.DebtorPaidRequest
 
 @Dao
 interface DebtorDAO {
@@ -19,4 +17,11 @@ interface DebtorDAO {
     @Transaction
     @Query("SELECT * FROM expensedebtor WHERE expense_id = :expenseId")
     suspend fun getExpenseDebtors(expenseId: String): List<DebtorInfo>
+
+    @Update(entity = ExpenseDebtor::class)
+    suspend fun updateDebtor(request: DebtorPaidRequest)
+
+    // Only for testing
+    @Query("SELECT * FROM expensedebtor WHERE id =:debtorId")
+    suspend fun getExpenseDebtor(debtorId: String)
 }
