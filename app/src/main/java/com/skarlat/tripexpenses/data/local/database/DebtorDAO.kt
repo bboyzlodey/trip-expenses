@@ -23,5 +23,5 @@ interface DebtorDAO {
 
     // Only for testing
     @Query("SELECT * FROM expensedebtor WHERE id =:debtorId")
-    suspend fun getExpenseDebtor(debtorId: String)
+    suspend fun getExpenseDebtor(debtorId: String): ExpenseDebtor
 }

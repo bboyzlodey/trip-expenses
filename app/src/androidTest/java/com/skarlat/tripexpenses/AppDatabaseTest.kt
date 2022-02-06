@@ -188,7 +188,7 @@ class AppDatabaseTest {
         db.debtorDAO.updateDebtor(DebtorPaidRequest(mockedDebtor.id, true))
 
         val factResult = db.debtorDAO.getExpenseDebtor(mockedDebtor.id)
-        val actualResult = mockedDebtor.copy(isDebtPayed = false)
+        val actualResult = mockedDebtor.copy(isDebtPayed = true)
 
         assertEquals(factResult, actualResult)
     }
