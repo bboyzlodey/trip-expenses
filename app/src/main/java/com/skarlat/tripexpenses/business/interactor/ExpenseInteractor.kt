@@ -45,7 +45,8 @@ class ExpenseInteractor @Inject constructor(
 
     suspend fun getExpenses(tripId: String): Flow<List<Expense>> {
         return flowOf(
-            expenseRepository.getExpenses(tripId).mapToUIModel(dateFormatter = dateFormatter)
+            expenseRepository.getExpenseInfoItems(tripId)
+                .mapToUIModel(dateFormatter = dateFormatter)
         )
     }
 

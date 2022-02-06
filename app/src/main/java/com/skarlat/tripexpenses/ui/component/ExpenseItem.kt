@@ -17,7 +17,7 @@ import com.skarlat.tripexpenses.ui.model.Expense
 
 @Composable
 fun ExpenseItem(item: Expense, onClick: () -> Unit) {
-    Box(Modifier.background(Color.White)) {
+    Box(Modifier.background(if (item.isPayed) Color.White else Color.Yellow)) {
         Box(
             Modifier
                 .padding(8.dp)
@@ -32,11 +32,11 @@ fun ExpenseItem(item: Expense, onClick: () -> Unit) {
                     text = item.amount,
                     modifier = horizontalEnd
                 )
-                Text(
+                /*Text(
                     text = item.debt,
                     color = if (item.isPayed) Color.Green else Color.Red,
                     modifier = horizontalEnd
-                )
+                )*/
             }
         }
     }
