@@ -39,7 +39,11 @@ class ExpenseInteractor @Inject constructor(
             amount = screenData.totalAmount,
             date = screenData.date
         )
-        val debtors = screenData.distributions.mapToEntity(expenseId = expense.id, DebtCalculator())
+        val debtors = screenData.distributions.mapToEntity(
+            expenseId = expense.id,
+            DebtCalculator(),
+            expense.ownerId
+        )
         debtorRepository.addDebtors(debtors)
         expenseRepository.putExpense(expense)
     }

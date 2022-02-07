@@ -56,7 +56,8 @@ fun Iterable<Participant>.mapToEntity(tripId: String): List<EntityParticipant> {
 
 fun Iterable<Distribution>.mapToEntity(
     expenseId: String,
-    debtCalculator: IDebtorCalculator
+    debtCalculator: IDebtorCalculator,
+    payOwnerId: String
 ): List<DebtorBusinessModel> {
     val debtorMap = debtCalculator.calculateDebits(this)
     return debtorMap.map { debtorEntry ->
@@ -65,7 +66,7 @@ fun Iterable<Distribution>.mapToEntity(
             expenseId = expenseId,
             debtAmount = debtorEntry.value,
             participantId = debtorEntry.key,
-            isDebtPayed = false
+            isDebtPayed = debtorEntry.key == payOwnerId
         )
     }
 }
