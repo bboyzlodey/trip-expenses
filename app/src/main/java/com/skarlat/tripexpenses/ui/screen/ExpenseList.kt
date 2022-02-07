@@ -71,35 +71,40 @@ fun PreviewExpenseListScreen() {
                 debt = "-100 руб",
                 isPayed = false,
                 id = "",
-                date = "26 февраля"
+                date = "26 февраля",
+                description = "Кафе"
             ),
             Expense(
                 amount = "16789 рублей",
                 debt = "-1100 руб",
                 isPayed = true,
                 id = "",
-                date = "25 февраля"
+                date = "25 февраля",
+                description = "Магазин Кант"
             ),
             Expense(
                 amount = "14 рублей",
                 debt = "0 руб",
                 isPayed = true,
                 id = "",
-                date = "24 февраля"
+                date = "24 февраля",
+                description = "МакДоналдс"
             ),
             Expense(
                 amount = "500 рублей",
                 debt = "-70 руб",
                 isPayed = false,
                 id = "",
-                date = "23 февраля"
+                date = "23 февраля",
+                description = "Ростикс"
             ),
             Expense(
                 amount = "50 рублей",
                 debt = "-50 руб",
                 isPayed = true,
                 id = "",
-                date = "22 февраля"
+                date = "22 февраля",
+                description = "Пиццерия IL Patio"
             ),
         ), onClick = {},
         participants = listOf("Василий", "Петя", "Leonid", "Valeria")

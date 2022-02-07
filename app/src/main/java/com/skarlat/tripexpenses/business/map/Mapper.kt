@@ -28,6 +28,7 @@ fun Iterable<TripEntity>.mapToUIModel(): List<TripUIModel> {
 }
 
 @JvmName("mapToUIModelExpenseEntity")
+@Deprecated("Use another method for converting model")
 fun Iterable<ExpenseEntity>.mapToUIModel(dateFormatter: DateFormatter): List<ExpenseUIModel> {
     return mapNotNull { entity: ExpenseEntity ->
         ExpenseUIModel(
@@ -35,7 +36,8 @@ fun Iterable<ExpenseEntity>.mapToUIModel(dateFormatter: DateFormatter): List<Exp
             date = dateFormatter.formatDateFromISO(entity.date),
             isPayed = false,
             amount = "${entity.amount} RUB",
-            debt = "0 RUB"
+            debt = "0 RUB",
+            description = ""
         )
     }
 }
@@ -96,11 +98,12 @@ fun Iterable<DebtorInfoBusinessModel>.mapToUIModel(): List<DebtorUIModel> {
 fun Iterable<ExpenseInfoItem>.mapToUIModel(dateFormatter: DateFormatter): List<ExpenseUIModel> {
     return map {
         ExpenseUIModel(
-            amount = "$it.totalAmount RUB",
+            amount = "${it.totalAmount} RUB",
             debt = it.description,
             isPayed = it.isPayed,
             id = it.expenseId,
-            date = dateFormatter.formatDateFromISO(it.date)
+            date = dateFormatter.formatDateFromISO(it.date),
+            description = it.description
         )
     }
 }

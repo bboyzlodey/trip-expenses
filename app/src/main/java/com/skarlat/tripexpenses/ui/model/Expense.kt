@@ -5,5 +5,6 @@ data class Expense(
     val debt: String,
     val isPayed: Boolean,
     val id: String,
-    val date: String
+    val date: String,
+    val description: String
 )

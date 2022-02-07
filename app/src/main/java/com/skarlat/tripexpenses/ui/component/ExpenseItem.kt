@@ -28,6 +28,7 @@ fun ExpenseItem(item: Expense, onClick: () -> Unit) {
                     Alignment.End
                 )
                 Text(text = item.date)
+                Text(text = item.description)
                 Text(
                     text = item.amount,
                     modifier = horizontalEnd
@@ -51,7 +52,8 @@ fun ExpenseItemPreview() {
             amount = "1000 руб",
             debt = "-100 руб.",
             isPayed = false,
-            date = "27 февраля 2018г."
+            date = "27 февраля 2018г.",
+            description = "Посиделки в кафе"
         )
     ) { }
 }
