@@ -3,10 +3,10 @@ package com.skarlat.tripexpenses.ui.component
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.OutlinedTextField
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.Composable
@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.skarlat.tripexpenses.R
 import com.skarlat.tripexpenses.ui.model.Distribution
 import com.skarlat.tripexpenses.ui.model.Participant
@@ -58,12 +59,21 @@ fun DistributionItem(
                             selectedItems.addAll(participants.map { it.id })
                         } else {
                             selectedItems.add(itemId)
-                            if (selectedItems.size == participants.size - 1)
-                                selectedItems.add(allChipItemId)
                         }
                     }
                 }
             )
+            TextButton(
+                onClick = {
+                    selectedItems.clear()
+                    selectedItems.addAll(participants.map { it.id })
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 4.dp)
+            ) {
+                Text(text = stringResource(id = R.string.select_all))
+            }
         }
         if (isSupportDeleting) {
             IconButton(onClick = { onRemoveClicked.invoke() }) {

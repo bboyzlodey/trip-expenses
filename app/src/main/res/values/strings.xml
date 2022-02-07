@@ -19,4 +19,6 @@
 	<string name="debtors">Задолжники:</string>
 	<string name="mark_debtor_as_payed">долг заплачен</string>
 	<string name="my_self">Я</string>
+	<string name="all_chip_item">Все</string>
+	<string name="select_all">Выбрать всех</string>
 </resources>
