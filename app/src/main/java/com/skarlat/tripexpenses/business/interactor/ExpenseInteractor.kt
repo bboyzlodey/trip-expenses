@@ -51,6 +51,7 @@ class ExpenseInteractor @Inject constructor(
     suspend fun getExpenses(tripId: String): Flow<List<Expense>> {
         return flowOf(
             expenseRepository.getExpenseInfoItems(tripId)
+                .sortedByDescending { it.date }
                 .mapToUIModel(dateFormatter = dateFormatter)
         )
     }

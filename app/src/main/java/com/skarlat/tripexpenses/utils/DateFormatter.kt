@@ -13,7 +13,7 @@ class DateFormatter @Inject constructor() {
 
     companion object Formats {
         const val DD_MMM = "dd MMM"
-        const val DD_MM_YY = "dd.MM.YY"
+        const val DD_MMM_YYY = "d MMMM"
     }
 
     fun formatFromInstant(millis: Long, format: String): String {
@@ -25,7 +25,7 @@ class DateFormatter @Inject constructor() {
     }
 
     fun formatDateFromISO(date: String): String {
-        return DateTimeFormatter.ofPattern(DD_MM_YY)
+        return DateTimeFormatter.ofPattern(DD_MMM_YYY)
             .format(DateTimeFormatter.ISO_LOCAL_DATE.parse(date))
     }
 
