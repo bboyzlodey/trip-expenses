@@ -23,7 +23,11 @@ import com.skarlat.tripexpenses.ui.viewModel.ExpensesListViewModel
 fun ExpenseList(expenses: List<Expense>, onClick: (Expense) -> Unit, participants: List<String>) {
     LazyColumn {
         item {
-            Text(text = stringResource(id = R.string.participants))
+            Text(
+                text = stringResource(id = R.string.participants),
+                modifier = Modifier.padding(start = 16.dp, top = 16.dp),
+                style = MaterialTheme.typography.subtitle2
+            )
             Row(modifier = Modifier.padding(top = 8.dp, bottom = 8.dp)) {
                 participants.forEach {
                     Text(text = it, modifier = Modifier.padding(start = 8.dp))
