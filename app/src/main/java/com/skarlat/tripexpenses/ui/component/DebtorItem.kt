@@ -37,7 +37,6 @@ fun DebtorItem(item: Debtor, onDebtorPayedClicked: () -> Unit) {
                 )
             }
         }
-
         if (!item.isPayed) {
             IconButton(onClick = onDebtorPayedClicked) {
                 Icon(

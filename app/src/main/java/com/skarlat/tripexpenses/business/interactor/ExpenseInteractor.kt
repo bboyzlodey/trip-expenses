@@ -66,7 +66,7 @@ class ExpenseInteractor @Inject constructor(
         val debtors = debtorRepository.getDebtors(expenseId)
         return ExpenseInfoUIModel(
             description = expense.description,
-            debtors = debtors.mapToUIModel(),
+            debtors = debtors.mapToUIModel(stringResourceWrapper),
             amount = expense.amount,
             debt = debtors.sumOf { if (it.debtor.isDebtPayed) 0 else it.debtor.debtAmount }
         )

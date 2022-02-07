@@ -73,21 +73,22 @@ fun Iterable<Distribution>.mapToEntity(
 @JvmName("mapToUIModelEntityParticipant")
 fun Iterable<EntityParticipant>.mapToUIModel(stringResourceWrapper: StringResourceWrapper): List<Participant> {
     return map {
-        Participant(
-            name = if (it.name == Const.SELF_ID) stringResourceWrapper.getString(R.string.my_self) else it.name,
-            id = it.id
-        )
+        it.mapToUIModel(stringResourceWrapper)
     }
 }
 
+private fun EntityParticipant.mapToUIModel(stringResourceWrapper: StringResourceWrapper): Participant {
+    return Participant(
+        name = if (name == Const.SELF_ID) stringResourceWrapper.getString(R.string.my_self) else name,
+        id = id
+    )
+}
+
 @JvmName("mapToUIModelExpenseDebtor")
-fun Iterable<DebtorInfoBusinessModel>.mapToUIModel(): List<DebtorUIModel> {
+fun Iterable<DebtorInfoBusinessModel>.mapToUIModel(stringResourceWrapper: StringResourceWrapper): List<DebtorUIModel> {
     return map {
         DebtorUIModel(
-            participant = Participant(
-                name = it.participant.name,
-                id = it.participant.name
-            ),
+            participant = it.participant.mapToUIModel(stringResourceWrapper),
             amount = it.debtor.debtAmount,
             isPayed = it.debtor.isDebtPayed,
             id = it.debtor.id
