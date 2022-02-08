@@ -42,7 +42,7 @@ class TripInteractor @Inject constructor(
     )
 
     fun getTripListFlow(): Flow<List<com.skarlat.tripexpenses.ui.model.Trip>> {
-        return tripRepository.getTripsFlow().map { it.mapToUIModel() }
+        return tripRepository.getTripsFlow().map { it.reversed().mapToUIModel() }
     }
 
     suspend fun getTrip(tripId: String): Trip {
