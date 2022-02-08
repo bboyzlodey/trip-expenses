@@ -17,12 +17,15 @@ import com.skarlat.tripexpenses.ui.model.Expense
 
 @Composable
 fun ExpenseItem(item: Expense, onClick: () -> Unit) {
-    Box(Modifier.background(if (item.isPayed) Color.White else Color.Yellow)) {
+    Box(
+        Modifier
+            .background(if (item.isPayed) Color.White else Color.Yellow)
+            .clickable { onClick.invoke() }) {
         Box(
             Modifier
                 .padding(8.dp)
-                .clickable { onClick.invoke() }
-                .fillMaxWidth()) {
+                .fillMaxWidth()
+        ) {
             Column(Modifier.fillMaxWidth()) {
                 val horizontalEnd = Modifier.align(
                     Alignment.End
