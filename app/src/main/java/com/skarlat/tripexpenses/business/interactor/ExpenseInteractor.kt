@@ -69,11 +69,18 @@ class ExpenseInteractor @Inject constructor(
     suspend fun getExpenseInfo(expenseId: String): ExpenseInfoUIModel {
         val expense = expenseRepository.getExpense(expenseId)
         val debtors = debtorRepository.getDebtors(expenseId)
+        var totalAmount = 0
+        var totalDebt = 0
+        debtors.forEach {
+            totalAmount += it.debtor.debtAmount
+            if (!it.debtor.isDebtPayed)
+                totalDebt += it.debtor.debtAmount
+        }
         return ExpenseInfoUIModel(
             description = expense.description,
             debtors = debtors.mapToUIModel(stringResourceWrapper),
-            amount = expense.amount,
-            debt = debtors.sumOf { if (it.debtor.isDebtPayed) 0 else it.debtor.debtAmount }
+            amount = totalAmount,
+            debt = totalDebt
         )
     }
 
