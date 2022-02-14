@@ -1,6 +1,7 @@
 package com.skarlat.tripexpenses.ui.viewModel
 
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -147,4 +148,10 @@ class CreateExpenseViewModel @Inject constructor(
     private fun expenseCreatedFailure(error: Throwable?) {
         // TODO
     }
+
+    fun onDuplicateDistributionClicked(item: Distribution) {
+        val nextDistribution = getNextDistribution()
+        distributionsMutable.add(nextDistribution.copy(cost = mutableStateOf(item.cost.value)))
+    }
+
 }

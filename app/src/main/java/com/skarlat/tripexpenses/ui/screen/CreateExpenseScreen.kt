@@ -82,7 +82,8 @@ fun CreateExpenseScreen(viewModel: CreateExpenseViewModel) {
                         costId = item.id.toString(),
                         cost = it
                     )
-                }
+                },
+                onDuplicateClicked = { viewModel.onDuplicateDistributionClicked(item) }
             )
         }
 

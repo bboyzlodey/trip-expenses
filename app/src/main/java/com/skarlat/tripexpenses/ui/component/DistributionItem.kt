@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ControlPointDuplicate
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
@@ -32,7 +33,8 @@ fun DistributionItem(
     participants: List<Participant>,
     isSupportDeleting: Boolean,
     allChipItemId: String = Const.ALL_ID,
-    onDistributionValueChanged: (String) -> Unit
+    onDistributionValueChanged: (String) -> Unit,
+    onDuplicateClicked: () -> Unit
 ) {
     Row {
         Column(modifier = Modifier.weight(1f)) {
@@ -75,8 +77,17 @@ fun DistributionItem(
                 Text(text = stringResource(id = R.string.select_all))
             }
         }
+
+        IconButton(onClick = onDuplicateClicked) {
+            Icon(
+                imageVector = Icons.Default.ControlPointDuplicate,
+                contentDescription = stringResource(
+                    id = R.string.duplicate
+                )
+            )
+        }
         if (isSupportDeleting) {
-            IconButton(onClick = { onRemoveClicked.invoke() }) {
+            IconButton(onClick = onRemoveClicked) {
                 Icon(
                     imageVector = Icons.Default.Delete,
                     contentDescription = stringResource(id = R.string.delete)
@@ -101,6 +112,7 @@ fun Preview() {
         onRemoveClicked = { /*TODO*/ },
         participants = participants,
         isSupportDeleting = false,
-        onDistributionValueChanged = {}
+        onDistributionValueChanged = {},
+        onDuplicateClicked = {}
     )
 }
