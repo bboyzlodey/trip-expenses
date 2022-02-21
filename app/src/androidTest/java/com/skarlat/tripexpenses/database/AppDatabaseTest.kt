@@ -1,9 +1,11 @@
-package com.skarlat.tripexpenses
+package com.skarlat.tripexpenses.database
 
 import android.content.Context
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.skarlat.tripexpenses.core.CoroutineEnvironment
+import com.skarlat.tripexpenses.core.CoroutineEnvironmentImpl
 import com.skarlat.tripexpenses.data.local.database.AppDatabase
 import com.skarlat.tripexpenses.data.local.entity.Expense
 import com.skarlat.tripexpenses.data.local.entity.ExpenseDebtor
@@ -13,10 +15,6 @@ import com.skarlat.tripexpenses.data.local.model.DebtorPaidRequest
 import com.skarlat.tripexpenses.data.local.model.ExpenseInfoItem
 import com.skarlat.tripexpenses.utils.Const
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.asExecutor
-import kotlinx.coroutines.test.TestCoroutineDispatcher
-import kotlinx.coroutines.test.TestCoroutineScope
-import kotlinx.coroutines.test.runBlockingTest
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -25,18 +23,15 @@ import org.junit.runner.RunWith
 
 @ExperimentalCoroutinesApi
 @RunWith(AndroidJUnit4::class)
-class AppDatabaseTest {
+class AppDatabaseTest : CoroutineEnvironment by CoroutineEnvironmentImpl() {
     private lateinit var db: AppDatabase
-
-    private val testDispatcher = TestCoroutineDispatcher()
-    private val testScope = TestCoroutineScope(testDispatcher)
 
     @Before
     fun createDb() {
         val context = ApplicationProvider.getApplicationContext<Context>()
         db = Room.databaseBuilder(context, AppDatabase::class.java, "app.db")
-            .setQueryExecutor(testDispatcher.asExecutor())
-            .setTransactionExecutor(testDispatcher.asExecutor())
+            .setQueryExecutor(executor)
+            .setTransactionExecutor(executor)
             .build()
     }
 
@@ -47,7 +42,7 @@ class AppDatabaseTest {
     }
 
     @Test
-    fun debtorInfoRelation() = testScope.runBlockingTest {
+    fun debtorInfoRelation() = launchTest {
         val mockedParticipant = Participant("mocked_id", name = "Mr. Mock", "")
         val mockedDebtor = ExpenseDebtor(
             "id",
@@ -67,7 +62,7 @@ class AppDatabaseTest {
     }
 
     @Test
-    fun expenseInfoItem_query_Test() = testScope.runBlockingTest {
+    fun expenseInfoItem_query_Test() = launchTest {
         // mock
         val mockedParticipantVasya = Participant("vasya", "Василий", tripId = "sorochany")
         val mockedParticipantHelga = Participant("helga", "Ольга", tripId = "sorochany")
@@ -182,7 +177,7 @@ class AppDatabaseTest {
     }
 
     @Test
-    fun updateDebtorTable_DebtorPaidRequest() = testScope.runBlockingTest {
+    fun updateDebtorTable_DebtorPaidRequest() = launchTest {
         val mockedDebtor = ExpenseDebtor("id", "some_expense", 100, "some_id", false)
 
         db.debtorDAO.insertAll(mockedDebtor)
@@ -195,7 +190,7 @@ class AppDatabaseTest {
     }
 
     @Test
-    fun tripTotalAmountTest() = testScope.runBlockingTest {
+    fun tripTotalAmountTest() = launchTest {
         val mockedExpenseDebtors = listOf<ExpenseDebtor>(
             ExpenseDebtor(
                 id = "1",
