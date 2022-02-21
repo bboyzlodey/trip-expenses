@@ -33,4 +33,10 @@ class TripRepository @Inject constructor(private val tripDAO: TripDAO) : ITripRe
             tripDAO.insertTrip(trip)
         }
     }
+
+    override suspend fun getTripCostAmount(tripId: String): Int? {
+        return withContext(Dispatchers.IO) {
+            tripDAO.getTripCostAmount(tripId)
+        }
+    }
 }

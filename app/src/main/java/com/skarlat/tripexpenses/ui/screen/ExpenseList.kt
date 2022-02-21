@@ -1,6 +1,8 @@
 package com.skarlat.tripexpenses.ui.screen
 
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -20,7 +22,12 @@ import com.skarlat.tripexpenses.ui.model.Expense
 import com.skarlat.tripexpenses.ui.viewModel.ExpensesListViewModel
 
 @Composable
-fun ExpenseList(expenses: List<Expense>, onClick: (Expense) -> Unit, participants: List<String>) {
+fun ExpenseList(
+    expenses: List<Expense>,
+    onClick: (Expense) -> Unit,
+    participants: List<String>,
+    totalAmount: Int
+) {
     LazyColumn {
         item {
             Text(
@@ -33,10 +40,22 @@ fun ExpenseList(expenses: List<Expense>, onClick: (Expense) -> Unit, participant
                     Text(text = it, modifier = Modifier.padding(start = 8.dp))
                 }
             }
+            Text(
+                text = stringResource(id = R.string.total_paid_amount),
+                modifier = Modifier.padding(start = 16.dp, top = 16.dp),
+                style = MaterialTheme.typography.subtitle2
+            )
+            Text(
+                modifier = Modifier.padding(start = 20.dp, top = 4.dp, bottom = 16.dp),
+                text = "$totalAmount рублей"
+            )
         }
         items(expenses) { item ->
             ExpenseItem(item = item) { onClick.invoke(item) }
             Divider()
+        }
+        item {
+            Spacer(modifier = Modifier.height(32.dp))
         }
     }
 }
@@ -60,7 +79,8 @@ fun ExpenseListScreen(viewModel: ExpensesListViewModel) {
         ExpenseList(
             expenses = expenses,
             onClick = { viewModel.onExpenseClicked(it.id) },
-            participants = tripInfo.participantsName
+            participants = tripInfo.participantsName,
+            totalAmount = tripInfo.totalAmount
         )
     }
 }
@@ -111,6 +131,7 @@ fun PreviewExpenseListScreen() {
                 description = "Пиццерия IL Patio"
             ),
         ), onClick = {},
-        participants = listOf("Василий", "Петя", "Leonid", "Valeria")
+        participants = listOf("Василий", "Петя", "Leonid", "Valeria"),
+        totalAmount = 0
     )
 }

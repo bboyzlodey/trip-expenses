@@ -11,6 +11,7 @@ import com.skarlat.tripexpenses.data.local.entity.Participant
 import com.skarlat.tripexpenses.data.local.model.DebtorInfo
 import com.skarlat.tripexpenses.data.local.model.DebtorPaidRequest
 import com.skarlat.tripexpenses.data.local.model.ExpenseInfoItem
+import com.skarlat.tripexpenses.utils.Const
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.asExecutor
 import kotlinx.coroutines.test.TestCoroutineDispatcher
@@ -189,6 +190,50 @@ class AppDatabaseTest {
 
         val factResult = db.debtorDAO.getExpenseDebtor(mockedDebtor.id)
         val actualResult = mockedDebtor.copy(isDebtPayed = true)
+
+        assertEquals(factResult, actualResult)
+    }
+
+    @Test
+    fun tripTotalAmountTest() = testScope.runBlockingTest {
+        val mockedExpenseDebtors = listOf<ExpenseDebtor>(
+            ExpenseDebtor(
+                id = "1",
+                expenseId = "1",
+                debtAmount = 100,
+                participantId = Const.SELF_ID,
+                isDebtPayed = true
+            ),
+            ExpenseDebtor(
+                id = "2",
+                expenseId = "1",
+                debtAmount = 100,
+                participantId = Const.SELF_ID,
+                isDebtPayed = false
+            ),
+            ExpenseDebtor(
+                id = "3",
+                expenseId = "1",
+                debtAmount = 100,
+                participantId = "other",
+                isDebtPayed = false
+            ),
+        )
+        val mockedExpense = Expense(
+            id = "1",
+            ownerId = "",
+            description = "",
+            tripId = "trip",
+            amount = 500,
+            date = ""
+        )
+
+        // action
+        db.expenseDAO.insetAll(mockedExpense)
+        db.debtorDAO.insertAll(*mockedExpenseDebtors.toTypedArray())
+
+        val factResult = db.tripDAO.getTripCostAmount(tripId = "trip")
+        val actualResult = 200
 
         assertEquals(factResult, actualResult)
     }

@@ -8,4 +8,5 @@ interface ITripRepository {
     suspend fun getTrip(tripId: String): Trip
     fun getTripsFlow(): Flow<List<Trip>>
     suspend fun createTrip(trip: Trip)
+    suspend fun getTripCostAmount(tripId: String): Int?
 }

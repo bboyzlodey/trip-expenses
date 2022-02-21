@@ -48,4 +48,8 @@ class TripInteractor @Inject constructor(
     suspend fun getTrip(tripId: String): Trip {
         return tripRepository.getTrip(tripId)
     }
+
+    suspend fun getTripTotalCostAmount(tripId: String): Int {
+        return tripRepository.getTripCostAmount(tripId) ?: 0
+    }
 }

@@ -33,7 +33,13 @@ class ExpensesListViewModel @Inject constructor(
 
     val tripInfo: StateFlow<TripInfo> get() = tripInfoFlow
     private val tripInfoFlow =
-        MutableStateFlow<TripInfo>(TripInfo(name = "", participantsName = emptyList()))
+        MutableStateFlow<TripInfo>(
+            TripInfo(
+                name = "",
+                participantsName = emptyList(),
+                totalAmount = 0
+            )
+        )
 
     private var tripId: String = ""
 
@@ -61,7 +67,9 @@ class ExpensesListViewModel @Inject constructor(
             tripInfoFlow.emit(
                 TripInfo(
                     name = trip.name,
-                    participantsName = participants.map { if (it.id == Const.SELF_ID) selfName else it.name })
+                    participantsName = participants.map { if (it.id == Const.SELF_ID) selfName else it.name },
+                    totalAmount = tripInteractor.getTripTotalCostAmount(tripId)
+                )
             )
         }
     }
