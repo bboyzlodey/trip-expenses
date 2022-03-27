@@ -6,9 +6,12 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -37,62 +40,79 @@ class MainActivity : AppCompatActivity() /*,ComponentActivity()*/ {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setComposableContent()
+        listenDialogData()
+    }
+
+    private fun setComposableContent() {
         setContent {
             TripExpensesTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(color = MaterialTheme.colors.background) {
                     val navController = rememberNavController()
-                    LaunchedEffect(navController) {
-                        navigator.destinations.collect { event ->
-                            when (event) {
-                                is NavigationEvent.NavigateUp -> navController.navigateUp()
-                                is NavigationEvent.Directions -> navController.navigate(
-                                    event.destination,
-                                    event.builder
-                                )
-                            }
-                        }
-                    }
-                    NavHost(
-                        navController = navController,
-                        startDestination = Const.SCREEN_LIST_TRIP
-                    ) {
-                        composable(route = Const.SCREEN_LIST_TRIP) { navBackStackEntry ->
-                            TripListScreen(viewModel = hiltViewModel())
-                        }
-                        composable(route = Const.SCREEN_CREATE_TRIP) { navBackStackEntry ->
-                            CreateTripScreen(viewModel = hiltViewModel())
-                        }
-                        composable(route = ExpenseDestination.route()) { navBackStackEntry ->
-                            val viewModel = hiltViewModel<ExpenseViewModel>()
-                            val expenseId =
-                                navBackStackEntry.arguments?.getString("expenseId") ?: ""
-                            LaunchedEffect(key1 = expenseId, block = {
-                                viewModel.openExpense(expenseId)
-                            })
-                            ExpenseInfoScreen(viewModel = viewModel)
-                        }
-                        composable(route = Const.SCREEN_LIST_EXPENSES) { navBackStackEntry ->
-                            val viewModel = hiltViewModel<ExpensesListViewModel>()
-                            val tripId = navBackStackEntry.arguments?.getString("tripId") ?: ""
-                            LaunchedEffect(key1 = tripId, block = {
-                                viewModel.openTripId(tripId)
-                            })
-                            ExpenseListScreen(viewModel)
-                        }
-                        composable(route = Const.SCREEN_CREATE_EXPENSE) { navBackStackEntry ->
-                            val viewModel = hiltViewModel<CreateExpenseViewModel>()
-                            val tripId = navBackStackEntry.arguments?.getString("tripId") ?: ""
-                            LaunchedEffect(key1 = tripId, block = {
-                                viewModel.tripId = tripId
-                            })
-                            CreateExpenseScreen(viewModel = viewModel)
-                        }
-                    }
+                    ListenNavigationEvents(navController = navController)
+                    InitNavigationDestinations(navController = navController)
                 }
             }
         }
+    }
 
+    @Composable
+    private fun ListenNavigationEvents(navController: NavController) {
+        LaunchedEffect(navController) {
+            navigator.destinations.collect { event ->
+                when (event) {
+                    is NavigationEvent.NavigateUp -> navController.navigateUp()
+                    is NavigationEvent.Directions -> navController.navigate(
+                        event.destination,
+                        event.builder
+                    )
+                }
+            }
+        }
+    }
+
+    @Composable
+    private fun InitNavigationDestinations(navController: NavHostController) {
+        NavHost(
+            navController = navController,
+            startDestination = Const.SCREEN_LIST_TRIP
+        ) {
+            composable(route = Const.SCREEN_LIST_TRIP) { navBackStackEntry ->
+                TripListScreen(viewModel = hiltViewModel())
+            }
+            composable(route = Const.SCREEN_CREATE_TRIP) { navBackStackEntry ->
+                CreateTripScreen(viewModel = hiltViewModel())
+            }
+            composable(route = ExpenseDestination.route()) { navBackStackEntry ->
+                val viewModel = hiltViewModel<ExpenseViewModel>()
+                val expenseId =
+                    navBackStackEntry.arguments?.getString("expenseId") ?: ""
+                LaunchedEffect(key1 = expenseId, block = {
+                    viewModel.openExpense(expenseId)
+                })
+                ExpenseInfoScreen(viewModel = viewModel)
+            }
+            composable(route = Const.SCREEN_LIST_EXPENSES) { navBackStackEntry ->
+                val viewModel = hiltViewModel<ExpensesListViewModel>()
+                val tripId = navBackStackEntry.arguments?.getString("tripId") ?: ""
+                LaunchedEffect(key1 = tripId, block = {
+                    viewModel.openTripId(tripId)
+                })
+                ExpenseListScreen(viewModel)
+            }
+            composable(route = Const.SCREEN_CREATE_EXPENSE) { navBackStackEntry ->
+                val viewModel = hiltViewModel<CreateExpenseViewModel>()
+                val tripId = navBackStackEntry.arguments?.getString("tripId") ?: ""
+                LaunchedEffect(key1 = tripId, block = {
+                    viewModel.tripId = tripId
+                })
+                CreateExpenseScreen(viewModel = viewModel)
+            }
+        }
+    }
+
+    private fun listenDialogData() {
         lifecycleScope.launchWhenStarted {
             viewModel.dialogDate.collect { dialogData ->
                 supportFragmentManager.let {
