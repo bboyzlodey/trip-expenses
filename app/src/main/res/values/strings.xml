@@ -23,4 +23,5 @@
 	<string name="select_all">Выбрать всех</string>
 	<string name="duplicate">продублировать</string>
 	<string name="total_paid_amount">Итого потрачено:</string>
+	<string name="app_version">Версия: %s</string>
 </resources>

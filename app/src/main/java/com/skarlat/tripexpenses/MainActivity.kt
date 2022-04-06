@@ -4,10 +4,12 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.layout.Column
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
@@ -15,6 +17,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.skarlat.tripexpenses.ui.component.AppVersion
 import com.skarlat.tripexpenses.ui.navigation.ExpenseDestination
 import com.skarlat.tripexpenses.ui.navigation.NavigationEvent
 import com.skarlat.tripexpenses.ui.navigation.Navigator
@@ -47,11 +50,16 @@ class MainActivity : AppCompatActivity() /*,ComponentActivity()*/ {
     private fun setComposableContent() {
         setContent {
             TripExpensesTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(color = MaterialTheme.colors.background) {
-                    val navController = rememberNavController()
-                    ListenNavigationEvents(navController = navController)
-                    InitNavigationDestinations(navController = navController)
+                Column {
+                    Surface(
+                        color = MaterialTheme.colors.background,
+                        modifier = Modifier.weight(1f)
+                    ) {
+                        val navController = rememberNavController()
+                        ListenNavigationEvents(navController = navController)
+                        InitNavigationDestinations(navController = navController)
+                    }
+                    AppVersion()
                 }
             }
         }
