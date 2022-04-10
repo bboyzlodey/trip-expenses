@@ -9,7 +9,7 @@ import com.skarlat.tripexpenses.data.local.entity.Trip
 
 @Database(
     entities = [Expense::class, ExpenseDebtor::class, Participant::class, Trip::class],
-    version = 1
+    version = 2
 )
 abstract class AppDatabase : RoomDatabase() {
     abstract val debtorDAO: DebtorDAO
