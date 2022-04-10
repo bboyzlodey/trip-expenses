@@ -6,13 +6,11 @@ import com.skarlat.tripexpenses.data.local.entity.Trip
 import com.skarlat.tripexpenses.data.repository.IParticipantRepository
 import com.skarlat.tripexpenses.data.repository.ITripRepository
 import com.skarlat.tripexpenses.ui.model.Participant
-import com.skarlat.tripexpenses.utils.Const
 import dagger.hilt.android.scopes.ActivityRetainedScoped
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import java.util.*
 import javax.inject.Inject
-import com.skarlat.tripexpenses.data.local.entity.Participant as ParticipantEntity
 
 @ActivityRetainedScoped
 class TripInteractor @Inject constructor(
@@ -25,11 +23,7 @@ class TripInteractor @Inject constructor(
         tripRepository.createTrip(newTrip)
         participantRepository.addParticipants(
             participants = participants
-                .mapToEntity(newTrip.id) + ParticipantEntity(
-                name = Const.SELF_ID,
-                id = UUID.randomUUID().toString(),
-                tripId = newTrip.id
-            )
+                .mapToEntity(newTrip.id)
         )
     }
 
