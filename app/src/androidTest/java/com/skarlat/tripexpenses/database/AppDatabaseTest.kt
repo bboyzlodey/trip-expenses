@@ -2,6 +2,8 @@ package com.skarlat.tripexpenses.database
 
 import android.content.Context
 import androidx.room.Room
+import androidx.room.RoomDatabase
+import androidx.sqlite.db.SupportSQLiteDatabase
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.skarlat.tripexpenses.core.CoroutineEnvironment
@@ -13,6 +15,7 @@ import com.skarlat.tripexpenses.data.local.entity.Participant
 import com.skarlat.tripexpenses.data.local.model.DebtorInfo
 import com.skarlat.tripexpenses.data.local.model.DebtorPaidRequest
 import com.skarlat.tripexpenses.data.local.model.ExpenseInfoItem
+import com.skarlat.tripexpenses.di.DatabaseModule
 import com.skarlat.tripexpenses.utils.Const
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.After
@@ -31,7 +34,13 @@ class AppDatabaseTest : CoroutineEnvironment by CoroutineEnvironmentImpl() {
         val context = ApplicationProvider.getApplicationContext<Context>()
         db = Room.databaseBuilder(context, AppDatabase::class.java, "app.db")
             .setQueryExecutor(executor)
+            .addCallback(object : RoomDatabase.Callback() {
+                override fun onOpen(db: SupportSQLiteDatabase) {
+                    DatabaseModule.AddSelfIdCallback.onCreate(db)
+                }
+            })
             .setTransactionExecutor(executor)
+            .fallbackToDestructiveMigration()
             .build()
     }
 
@@ -229,6 +238,16 @@ class AppDatabaseTest : CoroutineEnvironment by CoroutineEnvironmentImpl() {
 
         val factResult = db.tripDAO.getTripCostAmount(tripId = "trip")
         val actualResult = 200
+
+        assertEquals(factResult, actualResult)
+    }
+
+    @Test
+    fun selfIdInAllTrips() = launchTest {
+        val actualResult = listOf(
+            Participant(id = Const.SELF_ID, name = Const.SELF_ID, tripId = Const.ALL_TRIPS)
+        )
+        val factResult = db.participantDAO.getParticipants("any")
 
         assertEquals(factResult, actualResult)
     }

@@ -1,7 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
-     id 'dagger.hilt.android.plugin'
+    id 'dagger.hilt.android.plugin'
 }
 
 apply plugin: 'kotlin-kapt'
@@ -13,8 +13,8 @@ android {
         applicationId "com.skarlat.tripexpenses"
         minSdk 26
         targetSdk 31
-        versionCode 1
-        versionName "0.1-alpha"
+        versionCode 2
+        versionName "0.2-alpha"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
