@@ -1,13 +1,13 @@
 package com.skarlat.tripexpenses
 
-import com.skarlat.tripexpenses.business.calculator.RealTimeInputCalculator.Companion.CALCULATION_ERROR
+import com.skarlat.tripexpenses.business.calculator.ExpressionReaderImpl
 import com.skarlat.tripexpenses.business.calculator.RealTimeInputCalculatorImpl
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
 class RealTimeInputCalculatorTest {
 
-    private val calculatorImpl = RealTimeInputCalculatorImpl()
+    private val calculatorImpl = RealTimeInputCalculatorImpl(ExpressionReaderImpl())
 
     @Test
     fun simpleDigitTest() {
@@ -43,7 +43,7 @@ class RealTimeInputCalculatorTest {
 
     @Test
     fun simpleDigitWithWhiteSpacesTest_3() {
-        val actualResult = CALCULATION_ERROR
+        val actualResult = 150
         val factResult = calculatorImpl.calculate("1 5\n0 \t \n")
 
         assertEquals(factResult, actualResult)
@@ -115,7 +115,7 @@ class RealTimeInputCalculatorTest {
 
     @Test
     fun simpleSumWithWhiteSpaceTest() {
-        val actualResult = CALCULATION_ERROR
+        val actualResult = 333
         val factResult = calculatorImpl.calculate(" 300 + 3 3 ")
 
         assertEquals(factResult, actualResult)
@@ -124,21 +124,17 @@ class RealTimeInputCalculatorTest {
     @Test
     fun simpleSubtractionTest() {
         val actualResult = 1500
-        val factResult = calculatorImpl.calculate("2000-500")
         simpleOperatorTest(
             firstArgument = "2000",
             secondArgument = "500",
-            operator = '+',
+            operator = '-',
             actualResult = actualResult
         )
-
-        assertEquals(factResult, actualResult)
-
     }
 
     @Test
     fun simpleMultiplicationTest() {
-        val actualResult = 64
+        val actualResult = 48
         symmetricTest(
             firstArgument = "8",
             secondArgument = "6",
@@ -152,7 +148,7 @@ class RealTimeInputCalculatorTest {
         val actualResult = 8
         simpleOperatorTest(
             firstArgument = "64",
-            secondArgument = "6",
+            secondArgument = "8",
             operator = '/',
             actualResult = actualResult
         )
@@ -160,7 +156,7 @@ class RealTimeInputCalculatorTest {
 
     @Test
     fun compositeSum() {
-        val actualResult = 19
+        val actualResult = 20
         val factResult = calculatorImpl.calculate("10+ 4  \t + 1+ \n +4+1 ")
 
         assertEquals(factResult, actualResult)
@@ -192,7 +188,7 @@ class RealTimeInputCalculatorTest {
 
     @Test
     fun composite_1() {
-        val factResult = "1500/2 + 300*3"
+        val factResult = calculatorImpl.calculate("1500/2 + 300*3")
         val actualResult = 1650
 
         assertEquals(factResult, actualResult)
@@ -200,7 +196,7 @@ class RealTimeInputCalculatorTest {
 
     @Test
     fun composite_2() {
-        val factResult = "1500/2 + 301"
+        val factResult = calculatorImpl.calculate("1500/2 + 301")
         val actualResult = 1051
 
         assertEquals(factResult, actualResult)
@@ -208,16 +204,16 @@ class RealTimeInputCalculatorTest {
 
     @Test
     fun composite_3_error() {
-        val factResult = "1500/2 + 301 +"
-        val actualResult = CALCULATION_ERROR
+        val factResult = calculatorImpl.calculate("1500/2 + 301 +")
+        val actualResult = 1051
 
         assertEquals(factResult, actualResult)
     }
 
     @Test
     fun composite_4_error() {
-        val factResult = "1500/"
-        val actualResult = CALCULATION_ERROR
+        val factResult = calculatorImpl.calculate("1500/")
+        val actualResult = 1500
 
         assertEquals(factResult, actualResult)
     }
