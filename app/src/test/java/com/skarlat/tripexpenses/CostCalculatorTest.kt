@@ -1,7 +1,7 @@
 package com.skarlat.tripexpenses
 
-import com.skarlat.tripexpenses.business.calculator.ICostCalculator
-import com.skarlat.tripexpenses.business.calculator.TotalCostCalculator
+import com.skarlat.tripexpenses.business.calculation.ICostCalculator
+import com.skarlat.tripexpenses.business.calculation.TotalCostCalculator
 import junit.framework.Assert.assertEquals
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi

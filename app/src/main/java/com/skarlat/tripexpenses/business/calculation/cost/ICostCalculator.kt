@@ -1,4 +1,4 @@
-package com.skarlat.tripexpenses.business.calculator
+package com.skarlat.tripexpenses.business.calculation
 
 import dagger.hilt.android.scopes.ViewModelScoped
 import kotlinx.coroutines.flow.Flow

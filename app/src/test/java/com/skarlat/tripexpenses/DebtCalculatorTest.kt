@@ -1,7 +1,7 @@
 package com.skarlat.tripexpenses
 
-import com.skarlat.tripexpenses.business.calculator.DebtCalculator
-import com.skarlat.tripexpenses.business.calculator.IDebtorCalculator
+import com.skarlat.tripexpenses.business.calculation.DebtCalculator
+import com.skarlat.tripexpenses.business.calculation.IDebtorCalculator
 import com.skarlat.tripexpenses.ui.model.Distribution
 import com.skarlat.tripexpenses.utils.Const
 import org.junit.After

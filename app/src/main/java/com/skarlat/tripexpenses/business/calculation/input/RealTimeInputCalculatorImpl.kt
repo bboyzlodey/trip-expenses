@@ -1,6 +1,6 @@
-package com.skarlat.tripexpenses.business.calculator
+package com.skarlat.tripexpenses.business.calculation.input
 
-import com.skarlat.tripexpenses.business.calculator.RealTimeInputCalculator.Companion.CALCULATION_ERROR
+import com.skarlat.tripexpenses.business.calculation.input.RealTimeInputCalculator.Companion.CALCULATION_ERROR
 import javax.inject.Inject
 
 class RealTimeInputCalculatorImpl @Inject constructor(

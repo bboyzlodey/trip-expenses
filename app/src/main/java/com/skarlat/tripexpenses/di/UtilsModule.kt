@@ -1,7 +1,7 @@
 package com.skarlat.tripexpenses.di
 
-import com.skarlat.tripexpenses.business.calculator.DebtCalculator
-import com.skarlat.tripexpenses.business.calculator.IDebtorCalculator
+import com.skarlat.tripexpenses.business.calculation.DebtCalculator
+import com.skarlat.tripexpenses.business.calculation.IDebtorCalculator
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

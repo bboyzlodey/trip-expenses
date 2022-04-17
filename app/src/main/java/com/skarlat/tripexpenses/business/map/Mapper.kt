@@ -1,7 +1,7 @@
 package com.skarlat.tripexpenses.business.map
 
 import com.skarlat.tripexpenses.R
-import com.skarlat.tripexpenses.business.calculator.IDebtorCalculator
+import com.skarlat.tripexpenses.business.calculation.IDebtorCalculator
 import com.skarlat.tripexpenses.data.local.model.ExpenseInfoItem
 import com.skarlat.tripexpenses.ui.model.Distribution
 import com.skarlat.tripexpenses.ui.model.Participant

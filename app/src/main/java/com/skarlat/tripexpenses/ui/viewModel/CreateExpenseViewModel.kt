@@ -6,7 +6,7 @@ import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.skarlat.tripexpenses.ActivityUtils
-import com.skarlat.tripexpenses.business.calculator.ICostCalculator
+import com.skarlat.tripexpenses.business.calculation.ICostCalculator
 import com.skarlat.tripexpenses.business.interactor.ExpenseInteractor
 import com.skarlat.tripexpenses.ui.ExpenseDateMemento
 import com.skarlat.tripexpenses.ui.model.CreateExpenseCommand

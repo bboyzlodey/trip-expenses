@@ -1,4 +1,4 @@
-package com.skarlat.tripexpenses.business.calculator
+package com.skarlat.tripexpenses.business.calculation
 
 import com.skarlat.tripexpenses.ui.model.Distribution
 import dagger.hilt.android.scopes.ActivityRetainedScoped

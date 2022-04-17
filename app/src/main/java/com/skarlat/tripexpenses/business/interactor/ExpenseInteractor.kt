@@ -1,6 +1,6 @@
 package com.skarlat.tripexpenses.business.interactor
 
-import com.skarlat.tripexpenses.business.calculator.DebtCalculator
+import com.skarlat.tripexpenses.business.calculation.DebtCalculator
 import com.skarlat.tripexpenses.business.map.mapToEntity
 import com.skarlat.tripexpenses.business.map.mapToUIModel
 import com.skarlat.tripexpenses.data.local.model.DebtorPaidRequest

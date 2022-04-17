@@ -1,4 +1,4 @@
-package com.skarlat.tripexpenses.business.calculator
+package com.skarlat.tripexpenses.business.calculation.input
 
 class ExpressionReaderImpl : ExpressionReader {
 

@@ -1,7 +1,7 @@
 package com.skarlat.tripexpenses
 
-import com.skarlat.tripexpenses.business.calculator.ExpressionReaderImpl
-import com.skarlat.tripexpenses.business.calculator.RealTimeInputCalculatorImpl
+import com.skarlat.tripexpenses.business.calculation.input.ExpressionReaderImpl
+import com.skarlat.tripexpenses.business.calculation.input.RealTimeInputCalculatorImpl
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
