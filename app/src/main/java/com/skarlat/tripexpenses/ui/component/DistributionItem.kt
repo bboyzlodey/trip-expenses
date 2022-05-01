@@ -10,21 +10,23 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ControlPointDuplicate
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.ViewModelStore
+import androidx.lifecycle.ViewModelStoreOwner
 import com.skarlat.tripexpenses.R
 import com.skarlat.tripexpenses.ui.model.Distribution
 import com.skarlat.tripexpenses.ui.model.Participant
 import com.skarlat.tripexpenses.ui.model.chipItem
+import com.skarlat.tripexpenses.ui.viewModel.CompositeDistributionItemViewModel
 import com.skarlat.tripexpenses.utils.Const
 import com.skarlat.tripexpenses.utils.MockHelper
+import timber.log.Timber
 
 @Composable
 fun DistributionItem(
@@ -115,4 +117,33 @@ fun Preview() {
         onDistributionValueChanged = {},
         onDuplicateClicked = {}
     )
+}
+
+
+@Composable
+@Preview
+fun AutoCalculableDistributionItem() {
+    Column(modifier = Modifier.fillMaxWidth()) {
+        val viewModelStore = remember {
+            Timber.tag("VIEW_MODEL_INSTANCE").d("remember.calculation()")
+            ViewModelStore()
+        }
+        val storeOwner = remember {
+            ViewModelStoreOwner { viewModelStore }
+        }
+        val viewModel = hiltViewModel<CompositeDistributionItemViewModel>(storeOwner)
+        var distributionExpressionValue by remember {
+            mutableStateOf("")
+        }
+        val summDistrib by viewModel.distributionSum.collectAsState(initial = 0)
+        OutlinedTextField(
+            value = distributionExpressionValue,
+            onValueChange = {
+                viewModel.onInputChanged(it)
+                distributionExpressionValue = it
+            },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+        )
+        Text(text = summDistrib.toString())
+    }
 }

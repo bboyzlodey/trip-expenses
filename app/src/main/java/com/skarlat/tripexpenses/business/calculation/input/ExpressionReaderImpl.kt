@@ -1,6 +1,8 @@
 package com.skarlat.tripexpenses.business.calculation.input
 
-class ExpressionReaderImpl : ExpressionReader {
+import javax.inject.Inject
+
+class ExpressionReaderImpl @Inject constructor() : ExpressionReader {
 
     override fun readExpression(expr: String): String {
         return filterExpression(expr)

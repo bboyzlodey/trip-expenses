@@ -1,28 +1,23 @@
 package com.skarlat.tripexpenses
 
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.Column
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
-import com.skarlat.tripexpenses.ui.component.AppVersion
+import com.skarlat.tripexpenses.ui.component.AutoCalculableDistributionItem
 import com.skarlat.tripexpenses.ui.navigation.ExpenseDestination
 import com.skarlat.tripexpenses.ui.navigation.NavigationEvent
 import com.skarlat.tripexpenses.ui.navigation.Navigator
@@ -35,28 +30,13 @@ import com.skarlat.tripexpenses.ui.viewModel.MainViewModel
 import com.skarlat.tripexpenses.utils.Const
 import com.skarlat.tripexpenses.utils.DialogFactory
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() /*,ComponentActivity()*/ {
 
     private val viewModel by viewModels<MainViewModel>()
-    private val intentFilter = IntentFilter("EXEC_COMMAND_1")
-    private val broadcastReceiver = object : BroadcastReceiver() {
-        override fun onReceive(context: Context?, intent: Intent?) {
-            val command = intent?.getStringExtra("command_bundle")
-            Log.d("BC_COMMAND", "receiveCommand: $command")
-            command?.let {
-                lifecycleScope.launch {
-                    launchCommand(it)
-                }
-            }
-        }
-    }
 
     @Inject
     lateinit var navigator: Navigator
@@ -67,20 +47,15 @@ class MainActivity : AppCompatActivity() /*,ComponentActivity()*/ {
         listenDialogData()
     }
 
-    private suspend fun launchCommand(command: String) {
-        withContext(Dispatchers.IO) {
-            val process = Runtime.getRuntime().exec(command)
-            process.outputStream.flush()
-            process.outputStream.close()
-            val result = process.inputStream.reader().readText()
-            Log.d("BC_COMMAND", "command: $command \nresult: $result")
-        }
-    }
-
     private fun setComposableContent() {
         setContent {
             TripExpensesTheme {
-                Column {
+                Column() {
+                    AutoCalculableDistributionItem()
+                    Spacer(modifier = Modifier.height(16.dp))
+                    AutoCalculableDistributionItem()
+                }
+                /*Column {
                     Surface(
                         color = MaterialTheme.colors.background,
                         modifier = Modifier.weight(1f)
@@ -90,7 +65,7 @@ class MainActivity : AppCompatActivity() /*,ComponentActivity()*/ {
                         InitNavigationDestinations(navController = navController)
                     }
                     AppVersion()
-                }
+                }*/
             }
         }
     }
