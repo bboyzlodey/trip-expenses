@@ -4,20 +4,15 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.skarlat.tripexpenses.ui.component.AutoCalculableDistributionItem
+import com.skarlat.tripexpenses.ui.component.AutoCalculableDistributionItemPreview
 import com.skarlat.tripexpenses.ui.navigation.ExpenseDestination
 import com.skarlat.tripexpenses.ui.navigation.NavigationEvent
 import com.skarlat.tripexpenses.ui.navigation.Navigator
@@ -50,11 +45,7 @@ class MainActivity : AppCompatActivity() /*,ComponentActivity()*/ {
     private fun setComposableContent() {
         setContent {
             TripExpensesTheme {
-                Column() {
-                    AutoCalculableDistributionItem()
-                    Spacer(modifier = Modifier.height(16.dp))
-                    AutoCalculableDistributionItem()
-                }
+                AutoCalculableDistributionItemPreview()
                 /*Column {
                     Surface(
                         color = MaterialTheme.colors.background,
