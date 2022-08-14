@@ -12,7 +12,7 @@ import javax.inject.Inject
 @ActivityRetainedScoped
 class ExpenseDateMemento @Inject constructor(private val dateFormatter: DateFormatter) {
 
-    private val timeStamp = MutableStateFlow(MaterialDatePicker.thisMonthInUtcMilliseconds())
+    private val timeStamp = MutableStateFlow(MaterialDatePicker.todayInUtcMilliseconds())
 
     private val dateISO = timeStamp.map {
         dateFormatter.formatFromInstant(it, DateTimeFormatter.ISO_LOCAL_DATE)
