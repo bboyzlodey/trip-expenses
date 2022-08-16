@@ -8,4 +8,5 @@ interface IExpenseRepository {
     suspend fun putExpense(expense: Expense)
     suspend fun getExpense(expenseId: String): Expense
     suspend fun getExpenseInfoItems(tripId: String): List<ExpenseInfoItem>
+    suspend fun removeExpense(expenseId: String)
 }

@@ -39,4 +39,12 @@ interface ExpenseDAO {
 
     @Insert
     suspend fun insetAll(vararg expenses: Expense)
+
+    @Transaction
+    @Query("DELETE FROM expense WHERE expense_id = :id")
+    suspend fun deleteExpense(id: String)
+
+    @Transaction
+    @Query("DELETE FROM expensedebtor WHERE expense_id = :id")
+    suspend fun deleteExpenseDebtors(id: String)
 }

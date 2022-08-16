@@ -4,7 +4,9 @@ import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.rememberScrollableState
 import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Text
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.DeleteForever
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -22,12 +24,27 @@ import com.skarlat.tripexpenses.utils.MockHelper
 @Composable
 fun ExpenseInfoScreen(viewModel: ExpenseViewModel) {
     val expenseInfo by viewModel.expenseInfo.collectAsState()
-    ExpenseInfo(
-        description = expenseInfo.description,
-        debtors = expenseInfo.debtors,
-        totalAmount = expenseInfo.amount,
-        onDebtPaidClicked = viewModel::markDebtAsPaid
-    )
+    Scaffold(topBar = {
+        TopAppBar(title = {
+            Text(text = stringResource(id = R.string.expense_app_bar_title))
+        }, actions = {
+            IconButton(onClick = viewModel::onDeleteExpenseClicked) {
+                Icon(
+                    imageVector = Icons.Default.DeleteForever, contentDescription = stringResource(
+                        id = R.string.delete_expense
+                    )
+                )
+            }
+        })
+    }) {
+        ExpenseInfo(
+            description = expenseInfo.description,
+            debtors = expenseInfo.debtors,
+            totalAmount = expenseInfo.amount,
+            onDebtPaidClicked = viewModel::markDebtAsPaid
+        )
+    }
+
 }
 
 @Composable

@@ -24,4 +24,6 @@
 	<string name="duplicate">продублировать</string>
 	<string name="total_paid_amount">Итого потрачено:</string>
 	<string name="app_version">Версия: %s</string>
+	<string name="expense_app_bar_title">Расход</string>
+	<string name="delete_expense">Удалить расход</string>
 </resources>
