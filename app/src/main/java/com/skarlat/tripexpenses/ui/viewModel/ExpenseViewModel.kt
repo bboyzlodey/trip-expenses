@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.skarlat.tripexpenses.business.interactor.ExpenseInteractor
 import com.skarlat.tripexpenses.ui.model.ExpenseInfo
 import com.skarlat.tripexpenses.ui.model.emptyExpenseInfo
+import com.skarlat.tripexpenses.ui.navigation.Navigator
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -13,7 +14,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ExpenseViewModel @Inject constructor(
-    private val expenseInteractor: ExpenseInteractor
+    private val expenseInteractor: ExpenseInteractor,
+    private val navigator: Navigator
 ) : ViewModel() {
 
     val expenseInfo: StateFlow<ExpenseInfo> get() = expenseInfoFlow
@@ -36,6 +38,13 @@ class ExpenseViewModel @Inject constructor(
         viewModelScope.launch {
             expenseInteractor.markDebtAsPaid(debtId)
             loadExpense()
+        }
+    }
+
+    fun onDeleteExpenseClicked() {
+        viewModelScope.launch {
+            expenseInteractor.removeExpense(expenseId)
+            navigator.navigateUp()
         }
     }
 }

@@ -9,8 +9,10 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class ExpenseRepository @Inject constructor(private val expenseDao: ExpenseDAO) :
-    IExpenseRepository {
+class ExpenseRepository @Inject constructor(
+    private val expenseDao: ExpenseDAO
+) : IExpenseRepository {
+
     override suspend fun getExpenses(tripId: String): List<Expense> {
         return withContext(Dispatchers.IO) {
             expenseDao.getExpenses(tripId)
@@ -30,6 +32,13 @@ class ExpenseRepository @Inject constructor(private val expenseDao: ExpenseDAO) 
     override suspend fun getExpenseInfoItems(tripId: String): List<ExpenseInfoItem> {
         return withContext(Dispatchers.IO) {
             expenseDao.getExpenseInfo(tripId)
+        }
+    }
+
+    override suspend fun removeExpense(expenseId: String) {
+        withContext(Dispatchers.IO) {
+            expenseDao.deleteExpense(expenseId)
+            expenseDao.deleteExpenseDebtors(expenseId)
         }
     }
 }

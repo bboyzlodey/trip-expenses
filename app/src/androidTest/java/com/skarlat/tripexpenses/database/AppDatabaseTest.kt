@@ -251,4 +251,21 @@ class AppDatabaseTest : CoroutineEnvironment by CoroutineEnvironmentImpl() {
 
         assertEquals(factResult, actualResult)
     }
+
+    @Test
+    fun removeExpenseTest() = launchTest {
+        db.expenseDAO.insetAll(
+            Expense(
+                id = "1",
+                ownerId = "kto-to",
+                description = "Hello",
+                tripId = "Magic",
+                amount = 0,
+                date = ""
+            )
+        )
+        db.expenseDAO.deleteExpense("1")
+        val factExpenses = db.expenseDAO.getExpenses("Magic")
+        assert(factExpenses.isEmpty())
+    }
 }

@@ -87,4 +87,8 @@ class ExpenseInteractor @Inject constructor(
     suspend fun markDebtAsPaid(debtId: String) {
         debtorRepository.updateDebtor(DebtorPaidRequest(id = debtId, isDebtPayed = true))
     }
+
+    suspend fun removeExpense(expenseId: String) {
+        expenseRepository.removeExpense(expenseId)
+    }
 }
