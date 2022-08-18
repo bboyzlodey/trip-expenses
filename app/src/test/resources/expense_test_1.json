@@ -1,0 +1,28 @@
+[
+  {
+    "expense_id": "1",
+    "pay_owner": "self",
+    "debtors": {
+      "ivan": 300,
+      "maria": 100,
+      "self": 1000
+    }
+  },
+  {
+    "expense_id": "2",
+    "pay_owner": "self",
+    "debtors": {
+      "ivan": 0,
+      "maria": 100
+    }
+  },
+  {
+    "expense_id": "3",
+    "pay_owner": "maria",
+    "debtors": {
+      "ivan": 300,
+      "maria": 100,
+      "self": 100
+    }
+  }
+]

@@ -3,6 +3,7 @@ package com.skarlat.tripexpenses.data.repository
 import com.skarlat.tripexpenses.data.local.database.ExpenseDAO
 import com.skarlat.tripexpenses.data.local.entity.Expense
 import com.skarlat.tripexpenses.data.local.model.ExpenseInfoItem
+import com.skarlat.tripexpenses.data.local.model.ExpenseWithDebtors
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -40,5 +41,9 @@ class ExpenseRepository @Inject constructor(
             expenseDao.deleteExpense(expenseId)
             expenseDao.deleteExpenseDebtors(expenseId)
         }
+    }
+
+    override suspend fun getExpensesForTrip(tripId: String): List<ExpenseWithDebtors> {
+        throw IllegalStateException("Not implemented")
     }
 }
