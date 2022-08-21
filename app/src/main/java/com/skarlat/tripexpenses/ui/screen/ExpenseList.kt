@@ -1,5 +1,6 @@
 package com.skarlat.tripexpenses.ui.screen
 
+import android.content.Intent
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
@@ -9,26 +10,74 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Calculate
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.content.FileProvider
 import com.skarlat.tripexpenses.R
 import com.skarlat.tripexpenses.ui.component.ExpenseItem
 import com.skarlat.tripexpenses.ui.model.Expense
+import com.skarlat.tripexpenses.ui.model.TripCalculationResultModel
 import com.skarlat.tripexpenses.ui.viewModel.ExpensesListViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import java.io.File
 
 @Composable
 fun ExpenseList(
     expenses: List<Expense>,
     onClick: (Expense) -> Unit,
     participants: List<String>,
-    totalAmount: Int
+    totalAmount: Int,
+    isCalculating: Boolean = false,
+    calculationResultModel: TripCalculationResultModel? = null
 ) {
     LazyColumn {
+        if (isCalculating) item {
+            Text(text = stringResource(id = R.string.trip_calculation_in_process))
+        }
+        if (calculationResultModel != null) item {
+            val context = LocalContext.current
+
+            LaunchedEffect(key1 = calculationResultModel.title, block = {
+                withContext(Dispatchers.IO) {
+                    val repoDir = File(context.filesDir, "calc_reports")
+                    repoDir.mkdir()
+                    val file = File(repoDir, "calculation_result.txt")
+                    file.writer().apply {
+                        write(calculationResultModel.title)
+                        appendLine()
+                        calculationResultModel.balances.forEach {
+                            appendLine(it)
+                        }
+                        close()
+                    }
+                }
+            })
+
+            Button(onClick = {
+                val intent = Intent()
+                intent.action = Intent.ACTION_VIEW
+                intent.type = "text/plain"
+                intent.data = FileProvider.getUriForFile(
+                    context,
+                    "com.skarlat.tripexpenses",
+                    File(File(context.filesDir, "calc_reports"), "calculation_result.txt"),
+                    "reports"
+                )
+                intent.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+                context.startActivity(intent)
+            }) {
+                Text(text = stringResource(id = R.string.open_trip_calculation))
+            }
+        }
         item {
             Text(
                 text = stringResource(id = R.string.participants),
@@ -64,6 +113,9 @@ fun ExpenseList(
 fun ExpenseListScreen(viewModel: ExpensesListViewModel) {
     val expenses by viewModel.expensesList.collectAsState()
     val tripInfo by viewModel.tripInfo.collectAsState()
+    val isCalculatingBalance by viewModel.isTripBalanceCalculating.collectAsState()
+    val calculationReport by viewModel.tripBalanceCalculationResult.collectAsState()
+
     Scaffold(floatingActionButton = {
         FloatingActionButton(onClick = { viewModel.onCreateExpenseClicked() }) {
             Icon(
@@ -72,15 +124,24 @@ fun ExpenseListScreen(viewModel: ExpensesListViewModel) {
             )
         }
     }, topBar = {
-        TopAppBar() {
+        TopAppBar(title = {
             Text(text = tripInfo.name)
-        }
+        }, actions = {
+            IconButton(onClick = { viewModel.onCalculateBalanceClicked() }) {
+                Icon(
+                    imageVector = Icons.Default.Calculate,
+                    contentDescription = stringResource(id = R.string.calculate_balance_description)
+                )
+            }
+        })
     }) {
         ExpenseList(
             expenses = expenses,
             onClick = { viewModel.onExpenseClicked(it.id) },
             participants = tripInfo.participantsName,
-            totalAmount = tripInfo.totalAmount
+            totalAmount = tripInfo.totalAmount,
+            isCalculating = isCalculatingBalance,
+            calculationResultModel = calculationReport
         )
     }
 }
