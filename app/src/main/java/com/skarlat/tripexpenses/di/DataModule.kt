@@ -22,4 +22,7 @@ interface DataModule {
     @Binds
     fun bindDebtorRepository(repository: DebtorRepository): IDebtorRepository
 
+    @Binds
+    fun bindNameDictionary(nameDictionaryImpl: NameDictionaryImpl): NameDictionary
+
 }
