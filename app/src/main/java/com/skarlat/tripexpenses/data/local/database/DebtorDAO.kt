@@ -24,4 +24,10 @@ interface DebtorDAO {
     // Only for testing
     @Query("SELECT * FROM expensedebtor WHERE id =:debtorId")
     suspend fun getExpenseDebtor(debtorId: String): ExpenseDebtor
+
+    @Transaction
+    @Query(
+        "SELECT * FROM expensedebtor WHERE expensedebtor.expense_id IN (:expenseIds)"
+    )
+    suspend fun getDebtors(expenseIds: List<String>): List<ExpenseDebtor>
 }

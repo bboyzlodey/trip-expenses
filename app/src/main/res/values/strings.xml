@@ -26,4 +26,8 @@
 	<string name="app_version">Версия: %s</string>
 	<string name="expense_app_bar_title">Расход</string>
 	<string name="delete_expense">Удалить расход</string>
+	<string name="trip_name_mask">Путешествие: %s</string>
+	<string name="calculate_balance_description">посчитать баланс</string>
+	<string name="trip_calculation_in_process">Производится расчет поездки</string>
+	<string name="open_trip_calculation">Открыть расчет</string>
 </resources>
