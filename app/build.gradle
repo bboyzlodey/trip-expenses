@@ -89,6 +89,8 @@ dependencies {
     implementation "com.squareup.moshi:moshi-kotlin:$moshiKotlin"
     implementation "com.jakewharton.timber:timber:$timber"
 
+    implementation(project(":expenses_shared"))
+
     kapt "com.google.dagger:hilt-compiler:$daggerHilt"
 
     testImplementation 'junit:junit:4.+'
