@@ -10,6 +10,7 @@ data class Expense(
     @ColumnInfo(name = "owner_id") val ownerId: String,
     @ColumnInfo(name = "description") val description: String,
     @ColumnInfo(name = "trip_id") val tripId: String,
+    @Deprecated("unused")
     @ColumnInfo(name = "amount") val amount: Int,
     @ColumnInfo(name = "date") val date: String,
 )
