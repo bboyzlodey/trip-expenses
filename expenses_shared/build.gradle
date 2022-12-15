@@ -1,8 +1,14 @@
 plugins {
     id 'com.android.library'
     id 'org.jetbrains.kotlin.multiplatform'
+    id 'com.squareup.sqldelight'
 }
 
+sqldelight {
+    Database {
+        packageName = "com.bboyzlodey.expenses"
+    }
+}
 
 kotlin {
     android()
@@ -10,7 +16,7 @@ kotlin {
 
 }
 
-android{
+android {
     compileSdk 33
     sourceSets.main.manifest.srcFile 'src/androidMain/AndroidManifest.xml'
 
@@ -39,17 +45,18 @@ android{
 }
 
 kotlin {
-    kotlin {
-        sourceSets {
-            commonMain {
+    sourceSets {
+        commonMain {
+        }
+        androidMain {
+            dependencies {
+                implementation 'androidx.core:core-ktx:1.9.0'
+                implementation 'com.squareup.sqldelight:android-driver:1.5.4'
             }
-            androidMain {
-                dependencies {
-                    implementation 'androidx.core:core-ktx:1.9.0'
-                }
-            }
-            jvmMain {
-
+        }
+        jvmMain {
+            dependencies {
+                implementation 'com.squareup.sqldelight:sqlite-driver:1.5.4'
             }
         }
     }

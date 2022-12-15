@@ -1,0 +1,46 @@
+CREATE TABLE Trip (
+    id TEXT PRIMARY KEY,
+    name TEXT NOT NULL,
+    createdDate TEXT NOT NULL
+);
+
+CREATE TABLE Expense (
+    id TEXT PRIMARY KEY,
+    amount INTEGER CHECK(amount>-1) NOT NULL ,
+    who_is_pay TEXT,
+    description_id TEXT,
+    trip_id TEXT,
+    FOREIGN KEY(who_is_pay) REFERENCES Trip (id),
+    FOREIGN KEY(description_id) REFERENCES DescriptionId (id),
+    FOREIGN KEY(trip_id) REFERENCES Trip (id)
+);
+
+CREATE TABLE DescriptionId (
+     id TEXT PRIMARY KEY,
+     description TEXT NOT NULL
+);
+
+CREATE TABLE ExpenseDebtor (
+     expense_id TEXT NOT NULL,
+     participant_id TEXT NOT NULL,
+     FOREIGN KEY(expense_id) REFERENCES Expense (id),
+     FOREIGN KEY(participant_id) REFERENCES Participant (id)
+);
+
+CREATE TABLE Participant (
+     id TEXT PRIMARY KEY,
+     name TEXT NOT NULL,
+     trip_id TEXT NOT NULL,
+     FOREIGN KEY(trip_id) REFERENCES Trip (id)
+);
+
+CREATE TABLE Remittance (
+     id TEXT PRIMARY KEY,
+     sender TEXT NOT NULL,
+     receiver TEXT NOT NULL,
+     amount INTEGER CHECK (amount>-1),
+     FOREIGN KEY(sender) REFERENCES Participant (id),
+     FOREIGN KEY(receiver) REFERENCES Participant (id)
+);
+
+
