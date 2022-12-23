@@ -6,11 +6,11 @@ CREATE TABLE Trip (
 
 CREATE TABLE Expense (
     id TEXT PRIMARY KEY,
-    amount INTEGER CHECK(amount>-1) NOT NULL ,
+    amount INTEGER CHECK(amount>-1) NOT NULL,
     who_is_pay TEXT,
     description_id TEXT,
     trip_id TEXT,
-    FOREIGN KEY(who_is_pay) REFERENCES Trip (id),
+    FOREIGN KEY(who_is_pay) REFERENCES Participant (id),
     FOREIGN KEY(description_id) REFERENCES DescriptionId (id),
     FOREIGN KEY(trip_id) REFERENCES Trip (id)
 );
@@ -43,4 +43,20 @@ CREATE TABLE Remittance (
      FOREIGN KEY(receiver) REFERENCES Participant (id)
 );
 
+selectAllTrips:
+SELECT * FROM Trip;
 
+selectTripById:
+SELECT * FROM Trip WHERE id =?;
+
+insertTrip:
+INSERT OR REPLACE INTO Trip (id,name, createdDate) VALUES (?,?,?);
+
+insertParticipant:
+INSERT OR REPLACE INTO Participant (id, name, trip_id) VALUES (?,?,?);
+
+selectAllParticipants:
+SELECT Participant.id, Participant.name FROM Participant WHERE trip_id = ?;
+
+selectExpensesOfTrip:
+SELECT Expense.amount, DescriptionId.description  FROM Expense INNER JOIN DescriptionId ON DescriptionId.id = Expense.description_id WHERE Expense.trip_id = ?;
